@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zombie Garden</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-wrapper">
+
+    <div class="topbar">
+        <h1>🌱 ZOMBIE GARDEN 🧟</h1>
+
+        <div class="stats">
+            <span>☀️ Energy: <b id="energy">200</b></span>
+            <span>⭐ Score: <b id="score">0</b></span>
+            <span>🌊 Wave: <b id="wave">1</b></span>
+        </div>
+    </div>
+
+    <div class="plant-menu">
+
+        <button class="plant-button selected" data-type="shooter">
+            🌱
+            <span>Shooter</span>
+            <small>100</small>
+        </button>
+
+        <button class="plant-button" data-type="sun">
+            🌻
+            <span>Sun Plant</span>
+            <small>50</small>
+        </button>
+
+        <button class="plant-button" data-type="wall">
+            🪵
+            <span>Wall</span>
+            <small>75</small>
+        </button>
+
+        <button class="plant-button" data-type="bomb">
+            💣
+            <span>Bomb</span>
+            <small>150</small>
+        </button>
+
+    </div>
+
+    <canvas id="gameCanvas" width="1000" height="600"></canvas>
+
+    <p class="instructions">
+        Select a plant, then click a grass tile to place it.
+    </p>
+
+</div>
+
+<div id="gameOver" class="overlay hidden">
+    <div class="gameover-box">
+        <h2>🧟 ZOMBIES TOOK THE GARDEN</h2>
+        <p>Your score: <span id="finalScore">0</span></p>
+
+        <button onclick="restartGame()">PLAY AGAIN</button>
+        <a href="/">BACK TO STREETGAMES</a>
+    </div>
+</div>
+
+<script src="game.js"></script>
+
+</body>
+</html>
