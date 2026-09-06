@@ -1,0 +1,407 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    background: #080b09;
+
+    color: white;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+#menu {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(50, 100, 55, 0.25),
+            transparent 45%
+        ),
+        linear-gradient(
+            135deg,
+            #101712,
+            #050706
+        );
+}
+
+.menu-box {
+    padding: 50px;
+
+    max-width: 700px;
+
+    border-radius: 20px;
+
+    background: rgba(15, 22, 17, 0.9);
+
+    border:
+        1px solid rgba(100, 180, 100, 0.25);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.7);
+}
+
+.logo {
+    font-size: 65px;
+
+    margin-bottom: 10px;
+}
+
+.menu-box h1 {
+    font-size: clamp(38px, 7vw, 70px);
+
+    letter-spacing: 3px;
+
+    margin-bottom: 15px;
+}
+
+.menu-box p {
+    color: #9aa39b;
+
+    font-size: 18px;
+
+    margin-bottom: 35px;
+}
+
+button {
+    border: none;
+
+    padding: 16px 32px;
+
+    border-radius: 9px;
+
+    background: #39d353;
+
+    color: #061008;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #55ef6d;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 25px rgba(57,211,83,0.3);
+}
+
+.instructions {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    margin-top: 35px;
+
+    color: #777f78;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+#game {
+    display: none;
+
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    background:
+        linear-gradient(
+            rgba(10,20,12,0.25),
+            rgba(4,8,5,0.65)
+        ),
+        #162019;
+
+    cursor: none;
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+.hud {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 18px 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    z-index: 10;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.65),
+            transparent
+        );
+}
+
+.hud-title {
+    font-size: 20px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+.health-container {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 8px;
+}
+
+.health-container span {
+    color: #aaa;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.health-bar {
+    width: 230px;
+
+    height: 17px;
+
+    overflow: hidden;
+
+    border-radius: 4px;
+
+    background: #252b27;
+
+    border: 1px solid #444;
+}
+
+#health {
+    width: 100%;
+
+    height: 100%;
+
+    background: #39d353;
+
+    transition: width 0.15s;
+}
+
+.health-container strong {
+    min-width: 30px;
+
+    font-size: 14px;
+}
+
+.score-box {
+    text-align: right;
+}
+
+.score-box span {
+    display: block;
+
+    color: #888;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.score-box strong {
+    font-size: 34px;
+
+    color: #55ef6d;
+}
+
+
+/* =========================
+   CANVAS
+========================= */
+
+#gameCanvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================
+   CROSSHAIR
+========================= */
+
+#crosshair {
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    color: #55ef6d;
+
+    font-size: 35px;
+
+    font-weight: bold;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    text-shadow:
+        0 0 8px #000;
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+#gameOver {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 50;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        rgba(0,0,0,0.78);
+
+    backdrop-filter: blur(6px);
+}
+
+.game-over-box {
+    width: min(90%, 450px);
+
+    padding: 45px 30px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background: #101611;
+
+    border:
+        1px solid rgba(255,80,70,0.3);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.8);
+}
+
+.game-over-box h2 {
+    color: #ff5147;
+
+    font-size: 36px;
+
+    margin-bottom: 15px;
+}
+
+.game-over-box p {
+    color: #999;
+
+    margin-bottom: 5px;
+}
+
+#finalScore {
+    display: block;
+
+    font-size: 55px;
+
+    color: #55ef6d;
+
+    margin-bottom: 25px;
+}
+
+.game-over-box button {
+    margin: 5px;
+}
+
+.secondary {
+    background: #252b27;
+
+    color: white;
+}
+
+.secondary:hover {
+    background: #353d37;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .menu-box {
+        padding: 30px 20px;
+    }
+
+    .health-bar {
+        width: 130px;
+    }
+
+    .hud {
+        padding: 12px;
+    }
+
+    .hud-title {
+        font-size: 15px;
+    }
+
+    .score-box strong {
+        font-size: 25px;
+    }
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chess Puzzle</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="menu">
+
+        <h1>♟️ CHESS PUZZLE</h1>
+
+        <p>Find the best move!</p>
+
+        <button onclick="startGame()">PLAY</button>
+
+    </div>
+
+
+    <div id="game">
+
+        <header>
+
+            <div>
+                <h1>♟️ CHESS PUZZLE</h1>
+                <p id="message">Find the best move!</p>
+            </div>
+
+            <div class="stats">
+
+                <div>
+                    <span>SCORE</span>
+                    <strong id="score">0</strong>
+                </div>
+
+                <div>
+                    <span>BEST</span>
+                    <strong id="best">0</strong>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <main>
+
+            <div class="board-container">
+
+                <div id="board"></div>
+
+            </div>
+
+
+            <div class="controls">
+
+                <button onclick="newPuzzle()">
+                    🔄 NEW PUZZLE
+                </button>
+
+                <button onclick="showHint()">
+                    💡 HINT
+                </button>
+
+            </div>
+
+        </main>
+
+
+        <div id="result">
+
+            <div class="result-box">
+
+                <h2 id="resultTitle">PUZZLE COMPLETE!</h2>
+
+                <p id="resultText"></p>
+
+                <button onclick="newPuzzle()">
+                    NEXT PUZZLE
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="game.js"></script>
+
+</body>
+
+</html>

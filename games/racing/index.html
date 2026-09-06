@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Racer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="menu">
+    <div class="menu-box">
+        <div class="car-icon">🏎️</div>
+
+        <h1>STREET RACER</h1>
+
+        <p>Dodge traffic. Stay on the road. Go as fast as you can.</p>
+
+        <button onclick="startGame()">START RACE</button>
+
+        <div class="instructions">
+            <span>⬅️➡️ STEER</span>
+            <span>⬆️ ACCELERATE</span>
+            <span>🏆 BEAT YOUR SCORE</span>
+        </div>
+    </div>
+</div>
+
+
+<div id="game">
+
+    <div class="hud">
+
+        <div class="hud-item">
+            <span>SCORE</span>
+            <strong id="score">0</strong>
+        </div>
+
+        <div class="hud-item">
+            <span>SPEED</span>
+            <strong id="speed">0</strong>
+        </div>
+
+        <div class="hud-item">
+            <span>LIVES</span>
+            <strong id="lives">❤️❤️❤️</strong>
+        </div>
+
+    </div>
+
+
+    <canvas id="gameCanvas"></canvas>
+
+
+    <div id="gameOver">
+
+        <div class="game-over-box">
+
+            <div class="crash">💥</div>
+
+            <h2>RACE OVER</h2>
+
+            <p>Your Score</p>
+
+            <strong id="finalScore">0</strong>
+
+            <button onclick="startGame()">
+                🏎️ RACE AGAIN
+            </button>
+
+            <button onclick="returnMenu()" class="secondary">
+                MAIN MENU
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="game.js"></script>
+
+</body>
+</html>

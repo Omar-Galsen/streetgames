@@ -1,0 +1,450 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1v1 Soccer</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #111;
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    h1 {
+        margin: 10px 0 5px;
+    }
+
+    #score {
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    canvas {
+        background: #168a35;
+        border: 4px solid white;
+        display: block;
+        margin: auto;
+        max-width: 95vw;
+        max-height: 80vh;
+    }
+
+    #instructions {
+        margin-top: 8px;
+        font-size: 14px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>⚽ 1v1 Soccer</h1>
+
+<div id="score">
+    🔵 <span id="p1score">0</span>
+    -
+    <span id="p2score">0</span> 🔴
+</div>
+
+<canvas id="game" width="1000" height="550"></canvas>
+
+<div id="instructions">
+    🔵 Player 1: WASD &nbsp;&nbsp; | &nbsp;&nbsp;
+    🔴 Player 2: Arrow Keys &nbsp;&nbsp; | &nbsp;&nbsp;
+    R = Restart
+</div>
+
+<script>
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const WIDTH = canvas.width;
+const HEIGHT = canvas.height;
+
+const keys = {};
+
+document.addEventListener("keydown", e => {
+    keys[e.key.toLowerCase()] = true;
+
+    if (e.key.toLowerCase() === "r") {
+        resetGame();
+    }
+});
+
+document.addEventListener("keyup", e => {
+    keys[e.key.toLowerCase()] = false;
+});
+
+// --------------------
+// GAME OBJECTS
+// --------------------
+
+const player1 = {
+    x: 180,
+    y: HEIGHT / 2,
+    radius: 28,
+    speed: 4.5,
+    color: "#2196f3"
+};
+
+const player2 = {
+    x: WIDTH - 180,
+    y: HEIGHT / 2,
+    radius: 28,
+    speed: 4.5,
+    color: "#f44336"
+};
+
+const ball = {
+    x: WIDTH / 2,
+    y: HEIGHT / 2,
+    radius: 15,
+    vx: 0,
+    vy: 0
+};
+
+let score1 = 0;
+let score2 = 0;
+
+// --------------------
+// FIELD
+// --------------------
+
+const goalWidth = 25;
+const goalHeight = 180;
+
+const goalTop = HEIGHT / 2 - goalHeight / 2;
+const goalBottom = HEIGHT / 2 + goalHeight / 2;
+
+// --------------------
+// DRAW FIELD
+// --------------------
+
+function drawField() {
+
+    ctx.fillStyle = "#168a35";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // Field lines
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 4;
+
+    // Outer boundary
+    ctx.strokeRect(2, 2, WIDTH - 4, HEIGHT - 4);
+
+    // Center line
+    ctx.beginPath();
+    ctx.moveTo(WIDTH / 2, 0);
+    ctx.lineTo(WIDTH / 2, HEIGHT);
+    ctx.stroke();
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc(WIDTH / 2, HEIGHT / 2, 80, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Center spot
+    ctx.beginPath();
+    ctx.arc(WIDTH / 2, HEIGHT / 2, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    // Penalty boxes
+    ctx.strokeRect(0, HEIGHT / 2 - 130, 150, 260);
+    ctx.strokeRect(WIDTH - 150, HEIGHT / 2 - 130, 150, 260);
+
+    // Goals
+    ctx.fillStyle = "#ddd";
+
+    ctx.fillRect(
+        0,
+        goalTop,
+        goalWidth,
+        goalHeight
+    );
+
+    ctx.fillRect(
+        WIDTH - goalWidth,
+        goalTop,
+        goalWidth,
+        goalHeight
+    );
+}
+
+// --------------------
+// PLAYER MOVEMENT
+// --------------------
+
+function movePlayers() {
+
+    // Player 1 - WASD
+    if (keys["w"]) player1.y -= player1.speed;
+    if (keys["s"]) player1.y += player1.speed;
+    if (keys["a"]) player1.x -= player1.speed;
+    if (keys["d"]) player1.x += player1.speed;
+
+    // Player 2 - arrows
+    if (keys["arrowup"]) player2.y -= player2.speed;
+    if (keys["arrowdown"]) player2.y += player2.speed;
+    if (keys["arrowleft"]) player2.x -= player2.speed;
+    if (keys["arrowright"]) player2.x += player2.speed;
+
+    keepInside(player1);
+    keepInside(player2);
+}
+
+function keepInside(player) {
+
+    player.x = Math.max(
+        player.radius,
+        Math.min(WIDTH - player.radius, player.x)
+    );
+
+    player.y = Math.max(
+        player.radius,
+        Math.min(HEIGHT - player.radius, player.y)
+    );
+}
+
+// --------------------
+// PLAYER / BALL COLLISION
+// --------------------
+
+function kickBall(player) {
+
+    const dx = ball.x - player.x;
+    const dy = ball.y - player.y;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < player.radius + ball.radius) {
+
+        const angle = Math.atan2(dy, dx);
+
+        const force = 8;
+
+        ball.vx = Math.cos(angle) * force;
+        ball.vy = Math.sin(angle) * force;
+
+        const overlap =
+            player.radius + ball.radius - distance;
+
+        ball.x += Math.cos(angle) * overlap;
+        ball.y += Math.sin(angle) * overlap;
+    }
+}
+
+// --------------------
+// BALL PHYSICS
+// --------------------
+
+function updateBall() {
+
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    // Friction
+    ball.vx *= 0.985;
+    ball.vy *= 0.985;
+
+    // Top / bottom walls
+    if (ball.y - ball.radius <= 0) {
+        ball.y = ball.radius;
+        ball.vy *= -0.8;
+    }
+
+    if (ball.y + ball.radius >= HEIGHT) {
+        ball.y = HEIGHT - ball.radius;
+        ball.vy *= -0.8;
+    }
+
+    // Left wall
+    if (
+        ball.x - ball.radius <= 0 &&
+        (ball.y < goalTop || ball.y > goalBottom)
+    ) {
+        ball.x = ball.radius;
+        ball.vx *= -0.8;
+    }
+
+    // Right wall
+    if (
+        ball.x + ball.radius >= WIDTH &&
+        (ball.y < goalTop || ball.y > goalBottom)
+    ) {
+        ball.x = WIDTH - ball.radius;
+        ball.vx *= -0.8;
+    }
+
+    checkGoal();
+}
+
+// --------------------
+// GOALS
+// --------------------
+
+function checkGoal() {
+
+    if (
+        ball.x < 0 &&
+        ball.y > goalTop &&
+        ball.y < goalBottom
+    ) {
+
+        score2++;
+
+        updateScore();
+
+        resetPositions();
+    }
+
+    if (
+        ball.x > WIDTH &&
+        ball.y > goalTop &&
+        ball.y < goalBottom
+    ) {
+
+        score1++;
+
+        updateScore();
+
+        resetPositions();
+    }
+}
+
+function updateScore() {
+
+    document.getElementById("p1score").textContent = score1;
+    document.getElementById("p2score").textContent = score2;
+}
+
+// --------------------
+// RESET
+// --------------------
+
+function resetPositions() {
+
+    player1.x = 180;
+    player1.y = HEIGHT / 2;
+
+    player2.x = WIDTH - 180;
+    player2.y = HEIGHT / 2;
+
+    ball.x = WIDTH / 2;
+    ball.y = HEIGHT / 2;
+
+    ball.vx = 0;
+    ball.vy = 0;
+}
+
+function resetGame() {
+
+    score1 = 0;
+    score2 = 0;
+
+    updateScore();
+
+    resetPositions();
+}
+
+// --------------------
+// DRAW PLAYERS
+// --------------------
+
+function drawPlayer(player, number) {
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x,
+        player.y,
+        player.radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = player.color;
+    ctx.fill();
+
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Number
+    ctx.fillStyle = "white";
+    ctx.font = "bold 18px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText(
+        number,
+        player.x,
+        player.y
+    );
+}
+
+// --------------------
+// DRAW BALL
+// --------------------
+
+function drawBall() {
+
+    ctx.beginPath();
+
+    ctx.arc(
+        ball.x,
+        ball.y,
+        ball.radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
+
+// --------------------
+// GAME LOOP
+// --------------------
+
+function gameLoop() {
+
+    movePlayers();
+
+    kickBall(player1);
+    kickBall(player2);
+
+    updateBall();
+
+    drawField();
+
+    drawPlayer(player1, "1");
+    drawPlayer(player2, "2");
+
+    drawBall();
+
+    requestAnimationFrame(gameLoop);
+}
+
+resetGame();
+gameLoop();
+
+</script>
+
+</body>
+</html>
+```

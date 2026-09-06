@@ -1,0 +1,340 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #080a09;
+
+    color: white;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+#menu {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255, 70, 40, 0.14),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #111514,
+            #050706
+        );
+}
+
+.menu-box {
+    width: min(90%, 700px);
+
+    padding: 55px 35px;
+
+    border-radius: 22px;
+
+    background: rgba(15, 18, 17, 0.92);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,0.8);
+}
+
+.car-icon {
+    font-size: 70px;
+
+    margin-bottom: 10px;
+}
+
+.menu-box h1 {
+    font-size: clamp(42px, 8vw, 75px);
+
+    letter-spacing: 4px;
+
+    margin-bottom: 15px;
+}
+
+.menu-box p {
+    color: #999;
+
+    font-size: 18px;
+
+    margin-bottom: 35px;
+}
+
+button {
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 16px 35px;
+
+    background: #ff4538;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #ff6257;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 25px rgba(255,69,56,0.35);
+}
+
+.instructions {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    margin-top: 35px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+#game {
+    display: none;
+
+    width: 100vw;
+    height: 100vh;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #202020;
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+.hud {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 18px 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+.hud-item {
+    min-width: 100px;
+
+    text-align: center;
+
+    padding: 8px 15px;
+
+    border-radius: 8px;
+
+    background: rgba(0,0,0,0.55);
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.hud-item span {
+    display: block;
+
+    color: #888;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+.hud-item strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 22px;
+}
+
+#score {
+    color: #ff5145;
+}
+
+#speed {
+    color: #ffd23f;
+}
+
+#lives {
+    color: #ff5145;
+}
+
+
+/* =========================
+   CANVAS
+========================= */
+
+#gameCanvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+#gameOver {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0,0,0,0.78);
+
+    backdrop-filter: blur(7px);
+
+    z-index: 20;
+}
+
+.game-over-box {
+    width: min(90%, 430px);
+
+    padding: 40px 30px;
+
+    text-align: center;
+
+    border-radius: 20px;
+
+    background: #121614;
+
+    border: 1px solid rgba(255,70,50,0.3);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.8);
+}
+
+.crash {
+    font-size: 55px;
+
+    margin-bottom: 5px;
+}
+
+.game-over-box h2 {
+    color: #ff5145;
+
+    font-size: 38px;
+
+    margin-bottom: 15px;
+}
+
+.game-over-box p {
+    color: #888;
+}
+
+#finalScore {
+    display: block;
+
+    color: #ffd23f;
+
+    font-size: 55px;
+
+    margin: 5px 0 25px;
+}
+
+.game-over-box button {
+    margin: 5px;
+}
+
+.secondary {
+    background: #292e2b;
+}
+
+.secondary:hover {
+    background: #3a403c;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .hud {
+        padding: 10px;
+    }
+
+    .hud-item {
+        min-width: 75px;
+
+        padding: 6px;
+    }
+
+    .hud-item strong {
+        font-size: 17px;
+    }
+
+    .hud-item span {
+        font-size: 8px;
+    }
+
+    .menu-box {
+        padding: 35px 20px;
+    }
+
+    .instructions {
+        gap: 10px;
+    }
+}

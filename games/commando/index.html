@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Strike</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="menu">
+    <div class="menu-box">
+        <div class="logo">⚔️</div>
+        <h1>COMMAND STRIKE</h1>
+        <p>Eliminate the targets before they reach you.</p>
+
+        <button onclick="startGame()">START MISSION</button>
+
+        <div class="instructions">
+            <span>🖱️ AIM</span>
+            <span>🔫 CLICK TO FIRE</span>
+            <span>❤️ PROTECT YOUR HEALTH</span>
+        </div>
+    </div>
+</div>
+
+
+<div id="game">
+
+    <div class="hud">
+
+        <div class="hud-left">
+            <div class="hud-title">COMMAND STRIKE</div>
+
+            <div class="health-container">
+                <span>HEALTH</span>
+
+                <div class="health-bar">
+                    <div id="health"></div>
+                </div>
+
+                <strong id="healthText">100</strong>
+            </div>
+        </div>
+
+
+        <div class="score-box">
+            <span>SCORE</span>
+            <strong id="score">0</strong>
+        </div>
+
+    </div>
+
+
+    <canvas id="gameCanvas"></canvas>
+
+
+    <div id="crosshair">
+        +
+    </div>
+
+
+    <div id="gameOver">
+
+        <div class="game-over-box">
+
+            <h2>MISSION FAILED</h2>
+
+            <p>Final Score</p>
+
+            <strong id="finalScore">0</strong>
+
+            <button onclick="startGame()">
+                🔄 RETRY MISSION
+            </button>
+
+            <button onclick="returnMenu()" class="secondary">
+                MAIN MENU
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="game.js"></script>
+
+</body>
+</html>
