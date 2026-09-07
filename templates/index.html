@@ -22,170 +22,13 @@
         body {
             min-height: 100vh;
             background:
-                radial-gradient(circle at 15% 15%, rgba(0, 255, 136, 0.13), transparent 30%),
-                radial-gradient(circle at 85% 25%, rgba(0, 140, 255, 0.12), transparent 30%),
-                radial-gradient(circle at 50% 90%, rgba(0, 255, 136, 0.08), transparent 35%),
+                radial-gradient(circle at 15% 15%, rgba(0,255,136,.13), transparent 30%),
+                radial-gradient(circle at 85% 25%, rgba(0,140,255,.12), transparent 30%),
                 #080b0a;
 
             color: white;
             font-family: Arial, Helvetica, sans-serif;
-            overflow-x: hidden;
         }
-
-
-        /* =========================
-           ANIMATED BACKGROUND
-        ========================= */
-
-        .background-glow {
-            position: fixed;
-            width: 450px;
-            height: 450px;
-            border-radius: 50%;
-            background: rgba(0, 255, 136, 0.06);
-            filter: blur(100px);
-            pointer-events: none;
-            z-index: -2;
-
-            animation: glowMove 12s ease-in-out infinite alternate;
-        }
-
-        .glow-one {
-            top: -150px;
-            left: -100px;
-        }
-
-        .glow-two {
-            right: -150px;
-            top: 250px;
-            background: rgba(0, 140, 255, 0.06);
-            animation-delay: -5s;
-        }
-
-        @keyframes glowMove {
-            from {
-                transform: translate(0, 0) scale(1);
-            }
-
-            to {
-                transform: translate(100px, 80px) scale(1.25);
-            }
-        }
-
-
-        /* =========================
-           PARTICLES
-        ========================= */
-
-        .particles {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .particles span {
-            position: absolute;
-
-            width: 4px;
-            height: 4px;
-
-            border-radius: 50%;
-
-            background: #00ff88;
-
-            opacity: 0.25;
-
-            box-shadow: 0 0 12px #00ff88;
-
-            animation: floatParticle linear infinite;
-        }
-
-        .particles span:nth-child(1) {
-            left: 5%;
-            animation-duration: 14s;
-        }
-
-        .particles span:nth-child(2) {
-            left: 13%;
-            animation-duration: 19s;
-            animation-delay: -5s;
-        }
-
-        .particles span:nth-child(3) {
-            left: 22%;
-            animation-duration: 16s;
-            animation-delay: -9s;
-        }
-
-        .particles span:nth-child(4) {
-            left: 31%;
-            animation-duration: 22s;
-            animation-delay: -12s;
-        }
-
-        .particles span:nth-child(5) {
-            left: 42%;
-            animation-duration: 17s;
-            animation-delay: -4s;
-        }
-
-        .particles span:nth-child(6) {
-            left: 53%;
-            animation-duration: 20s;
-            animation-delay: -8s;
-        }
-
-        .particles span:nth-child(7) {
-            left: 64%;
-            animation-duration: 15s;
-            animation-delay: -2s;
-        }
-
-        .particles span:nth-child(8) {
-            left: 74%;
-            animation-duration: 21s;
-            animation-delay: -11s;
-        }
-
-        .particles span:nth-child(9) {
-            left: 83%;
-            animation-duration: 18s;
-            animation-delay: -6s;
-        }
-
-        .particles span:nth-child(10) {
-            left: 92%;
-            animation-duration: 23s;
-            animation-delay: -14s;
-        }
-
-        @keyframes floatParticle {
-
-            0% {
-                transform: translateY(110vh);
-                opacity: 0;
-            }
-
-            15% {
-                opacity: 0.35;
-            }
-
-            50% {
-                transform: translateY(50vh) translateX(40px);
-            }
-
-            85% {
-                opacity: 0.3;
-            }
-
-            100% {
-                transform: translateY(-10vh) translateX(-40px);
-                opacity: 0;
-            }
-        }
-
 
         /* =========================
            NAVBAR
@@ -193,29 +36,24 @@
 
         nav {
             height: 75px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             padding: 0 7%;
 
-            background: rgba(5, 8, 7, 0.88);
-
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(5,8,7,.92);
+            border-bottom: 1px solid rgba(255,255,255,.08);
 
             backdrop-filter: blur(15px);
 
             position: sticky;
             top: 0;
-
-            z-index: 100;
+            z-index: 1000;
         }
 
         .logo {
             font-size: 26px;
             font-weight: 900;
-            letter-spacing: 1px;
         }
 
         .logo span {
@@ -225,48 +63,27 @@
         nav a {
             color: #aaa;
             text-decoration: none;
-
             margin-left: 30px;
-
             font-weight: bold;
-
-            transition: 0.2s;
         }
 
         nav a:hover {
             color: #00ff88;
         }
 
-
         /* =========================
            HERO
         ========================= */
 
         .hero {
-            min-height: 450px;
-
-            display: flex;
-            flex-direction: column;
-
-            justify-content: center;
-            align-items: center;
-
             text-align: center;
-
-            padding: 70px 20px;
+            padding: 80px 20px 60px;
         }
 
         .hero h1 {
-            font-size: clamp(55px, 9vw, 100px);
-
+            font-size: clamp(50px, 8vw, 95px);
             font-weight: 900;
-
-            letter-spacing: -5px;
-
-            line-height: 1;
-
-            text-shadow:
-                0 0 25px rgba(0,255,136,0.2);
+            letter-spacing: -4px;
         }
 
         .hero h1 span {
@@ -274,88 +91,51 @@
         }
 
         .hero p {
-            margin-top: 22px;
-
             max-width: 650px;
-
-            font-size: 21px;
-
-            line-height: 1.6;
-
+            margin: 20px auto;
             color: #999;
+            font-size: 20px;
+            line-height: 1.6;
         }
 
         .hero-button {
             display: inline-block;
-
-            margin-top: 35px;
-
-            padding: 16px 45px;
+            margin-top: 20px;
+            padding: 15px 35px;
 
             border-radius: 12px;
 
             background: #00d878;
-
             color: #06100b;
 
             text-decoration: none;
-
-            font-size: 20px;
-
             font-weight: 900;
-
-            transition: 0.25s;
-
-            box-shadow:
-                0 0 30px rgba(0,255,136,0.15);
+            font-size: 18px;
         }
 
         .hero-button:hover {
-            transform: translateY(-4px) scale(1.05);
-
             background: #00ff88;
-
-            box-shadow:
-                0 0 45px rgba(0,255,136,0.35);
+            transform: translateY(-3px);
         }
 
-
         /* =========================
-           SECTIONS
+           SECTION
         ========================= */
 
         .section {
             width: 86%;
-            max-width: 1300px;
-
+            max-width: 1400px;
             margin: auto;
-
-            padding: 45px 0;
+            padding: 40px 0;
         }
 
         .section-title {
-            display: flex;
-
-            justify-content: space-between;
-            align-items: center;
-
             margin-bottom: 25px;
         }
 
         .section-title h2 {
             font-size: 30px;
         }
-
-        .section-title span {
-            color: #00ff88;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-            letter-spacing: 1px;
-        }
-
 
         /* =========================
            GAME GRID
@@ -365,144 +145,255 @@
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fit, minmax(250px, 1fr));
+                repeat(auto-fit, minmax(280px, 1fr));
 
-            gap: 22px;
+            gap: 25px;
         }
-
 
         /* =========================
            GAME CARD
         ========================= */
 
-        .game-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
         .game-card {
             position: relative;
 
-            min-height: 250px;
+            background: #111614;
 
-            padding: 30px;
+            border: 1px solid rgba(255,255,255,.08);
 
             border-radius: 18px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.075),
-                    rgba(255,255,255,0.025)
-                );
-
-            border: 1px solid rgba(255,255,255,0.08);
-
             overflow: hidden;
 
-            transition:
-                transform 0.25s,
-                border-color 0.25s,
-                box-shadow 0.25s;
-        }
+            transition: .25s;
 
-        .game-card::before {
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-            height: 180px;
-
-            right: -80px;
-            bottom: -80px;
-
-            background: #00ff88;
-
-            filter: blur(90px);
-
-            opacity: 0.07;
-
-            transition: 0.3s;
+            cursor: pointer;
         }
 
         .game-card:hover {
-            transform: translateY(-9px);
+            transform: translateY(-8px);
 
-            border-color:
-                rgba(0,255,136,0.45);
+            border-color: rgba(0,255,136,.5);
 
             box-shadow:
-                0 20px 50px rgba(0,0,0,0.5),
-                0 0 25px rgba(0,255,136,0.08);
+                0 20px 50px rgba(0,0,0,.5),
+                0 0 25px rgba(0,255,136,.12);
         }
 
-        .game-card:hover::before {
-            opacity: 0.15;
-        }
+        /* =========================
+           VIDEO PREVIEW
+        ========================= */
 
-        .game-icon {
+        .game-video {
+            width: 100%;
+            height: 180px;
+
+            object-fit: cover;
+
             display: block;
 
-            font-size: 65px;
-
-            margin-bottom: 20px;
-
-            transition: 0.25s;
+            background: #050706;
         }
 
-        .game-card:hover .game-icon {
-            transform: scale(1.12) rotate(-3deg);
+        /* =========================
+           GAME INFO
+        ========================= */
+
+        .game-info {
+            padding: 20px;
         }
 
-        .game-card h3 {
-            font-size: 26px;
-
-            margin-bottom: 10px;
+        .game-info h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
-        .game-card p {
+        .game-info p {
             color: #999;
-
             line-height: 1.5;
-
-            max-width: 250px;
+            margin-bottom: 18px;
         }
 
-        .play {
-            position: absolute;
+        .play-button {
+            display: inline-block;
 
-            right: 22px;
-            bottom: 22px;
+            padding: 10px 20px;
 
-            width: 44px;
-            height: 44px;
-
-            border-radius: 50%;
-
-            display: flex;
-
-            justify-content: center;
-            align-items: center;
+            border-radius: 10px;
 
             background: #00d878;
 
             color: #06100b;
 
-            font-weight: bold;
+            font-weight: 900;
 
-            transition: 0.2s;
+            text-decoration: none;
+
+            transition: .2s;
         }
 
-        .game-card:hover .play {
-            transform: scale(1.15);
-
+        .play-button:hover {
             background: #00ff88;
+            transform: scale(1.05);
+        }
+
+        /* =========================
+           GAME PLAYER OVERLAY
+        ========================= */
+
+        #gameOverlay {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,.94);
+
+            z-index: 5000;
+
+            padding: 20px;
+        }
+
+        #gameOverlay.active {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-window {
+            width: min(1200px, 96vw);
+            height: min(750px, 90vh);
+
+            background: #090c0b;
+
+            border: 1px solid rgba(0,255,136,.3);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            position: relative;
 
             box-shadow:
-                0 0 20px rgba(0,255,136,0.3);
+                0 30px 100px rgba(0,0,0,.8);
         }
 
+        /* =========================
+           GAME HEADER
+        ========================= */
+
+        .game-header {
+            height: 55px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 18px;
+
+            background: #101513;
+
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .game-title {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .close-button {
+            width: 38px;
+            height: 38px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #222;
+
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            background: #ff4444;
+        }
+
+        /* =========================
+           LOADING SCREEN
+        ========================= */
+
+        #loadingScreen {
+            position: absolute;
+
+            inset: 55px 0 0 0;
+
+            background: #080b0a;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 10;
+        }
+
+        .loader {
+            width: 65px;
+            height: 65px;
+
+            border: 6px solid #222;
+
+            border-top-color: #00ff88;
+
+            border-radius: 50%;
+
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+
+            color: #00ff88;
+
+            font-weight: bold;
+
+            font-size: 18px;
+        }
+
+        /* =========================
+           GAME IFRAME
+        ========================= */
+
+        #gameFrame {
+            position: absolute;
+
+            top: 55px;
+            left: 0;
+
+            width: 100%;
+            height: calc(100% - 55px);
+
+            border: none;
+
+            background: black;
+        }
 
         /* =========================
            CATEGORIES
@@ -510,9 +401,7 @@
 
         .categories {
             display: flex;
-
             flex-wrap: wrap;
-
             gap: 12px;
         }
 
@@ -521,44 +410,30 @@
 
             border-radius: 30px;
 
-            background:
-                rgba(255,255,255,0.05);
+            background: rgba(255,255,255,.05);
 
-            border:
-                1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,.08);
 
             color: #bbb;
-
-            font-weight: bold;
-
-            transition: 0.2s;
         }
 
         .category:hover {
             color: #00ff88;
-
             border-color: #00ff88;
-
-            background:
-                rgba(0,255,136,0.06);
-
-            transform: translateY(-2px);
         }
-
 
         /* =========================
            FOOTER
         ========================= */
 
         footer {
-            margin-top: 50px;
+            margin-top: 60px;
 
             padding: 45px 20px;
 
             text-align: center;
 
-            border-top:
-                1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255,255,255,.08);
 
             color: #666;
         }
@@ -567,12 +442,11 @@
             color: #00ff88;
         }
 
-
         /* =========================
            MOBILE
         ========================= */
 
-        @media (max-width: 650px) {
+        @media(max-width:650px) {
 
             nav {
                 padding: 0 20px;
@@ -582,385 +456,620 @@
                 display: none;
             }
 
-            .hero {
-                min-height: 400px;
-            }
-
-            .hero h1 {
-                letter-spacing: -3px;
-            }
-
             .section {
-                width: 90%;
+                width: 92%;
             }
 
-            .section-title span {
-                display: none;
+            .game-video {
+                height: 170px;
             }
 
+            .game-window {
+                width: 100%;
+                height: 90vh;
+            }
         }
 
     </style>
 </head>
 
-
 <body>
 
+<!-- =========================
+     NAVBAR
+========================= -->
 
-    <!-- ANIMATED BACKGROUND -->
+<nav>
 
-    <div class="background-glow glow-one"></div>
-    <div class="background-glow glow-two"></div>
+    <div class="logo">
+        🎮 STREET<span>GAMES</span>
+    </div>
 
-    <div class="particles">
+    <div>
 
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <a href="/">HOME</a>
+
+        <a href="#games">GAMES</a>
+
+        <a href="#categories">CATEGORIES</a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <h1>
+        PLAY <span>ANYTHING.</span>
+    </h1>
+
+    <p>
+        Jump, race, fly, shoot, score and survive.
+        Your collection of free browser games.
+    </p>
+
+    <a href="#games" class="hero-button">
+        🎮 PLAY NOW
+    </a>
+
+</section>
+
+
+<!-- =========================
+     GAMES
+========================= -->
+
+<section class="section" id="games">
+
+    <div class="section-title">
+
+        <h2>🔥 Featured Games</h2>
 
     </div>
 
 
-    <!-- NAVIGATION -->
+    <div class="games">
 
-    <nav>
 
-        <div class="logo">
-            🎮 STREET<span>GAMES</span>
+        <!-- RUNNER -->
+
+        <div class="game-card"
+             onclick="openGame('Runner', '/games/runner/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/runner.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🏃 Runner</h3>
+
+                <p>
+                    Run, jump and survive as long as you can.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
         </div>
 
-        <div>
 
-            <a href="/">HOME</a>
+        <!-- SOCCER -->
 
-            <a href="#games">GAMES</a>
+        <div class="game-card"
+             onclick="openGame('Soccer', '/games/soccer/')">
 
-            <a href="#categories">CATEGORIES</a>
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
 
-        </div>
+                <source src="/static/videos/soccer.mp4"
+                        type="video/mp4">
 
-    </nav>
+            </video>
 
+            <div class="game-info">
 
-    <!-- HERO -->
+                <h3>⚽ Soccer</h3>
 
-    <section class="hero">
+                <p>
+                    Hit the field and show your skills.
+                </p>
 
-        <h1>
-            PLAY <span>ANYTHING.</span>
-        </h1>
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
 
-        <p>
-            Jump, race, fly, shoot, score and survive.
-            Your collection of free browser games.
-        </p>
-
-        <a href="#games" class="hero-button">
-            🎮 PLAY NOW
-        </a>
-
-    </section>
-
-
-    <!-- GAMES -->
-
-    <section class="section" id="games">
-
-        <div class="section-title">
-
-            <h2>🔥 Featured Games</h2>
-
-            <span>PLAY IN YOUR BROWSER</span>
+            </div>
 
         </div>
 
 
-        <div class="games">
+        <!-- RACING -->
 
+        <div class="game-card"
+             onclick="openGame('Racing', '/games/racing/')">
 
-            <!-- RUNNER -->
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
 
-            <a href="/games/runner/" class="game-link">
+                <source src="/static/videos/racing.mp4"
+                        type="video/mp4">
 
-                <div class="game-card">
+            </video>
 
-                    <span class="game-icon">🏃</span>
+            <div class="game-info">
 
-                    <h3>Runner</h3>
+                <h3>🏎️ Racing</h3>
 
-                    <p>
-                        Run, jump and survive as long as you can.
-                    </p>
+                <p>
+                    Race at full speed and beat the competition.
+                </p>
 
-                    <div class="play">▶</div>
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
 
-                </div>
+            </div>
 
-            </a>
-
-
-            <!-- SOCCER -->
-
-            <a href="/games/soccer/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">⚽</span>
-
-                    <h3>Soccer</h3>
-
-                    <p>
-                        Hit the field and show your skills.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-
-            <!-- RACING -->
-
-            <a href="/games/racing/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">🏎️</span>
-
-                    <h3>Racing</h3>
-
-                    <p>
-                        Race at full speed and beat the competition.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-
-            <!-- PUZZLE -->
-
-            <a href="/games/puzzle/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">🧩</span>
-
-                    <h3>Puzzle</h3>
-
-                    <p>
-                        Challenge your brain and solve the puzzle.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-
-            <!-- AIRPLANE -->
-
-            <a href="/games/airplane/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">✈️</span>
-
-                    <h3>Sky Pilot</h3>
-
-                    <p>
-                        Fly through obstacles and set a high score.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-
-            <!-- DEER -->
-
-            <a href="/games/deer/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">🦌</span>
-
-                    <h3>Deer Hunter</h3>
-
-                    <p>
-                        Test your aim and hit the moving targets.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-
-            <!-- SNAKE -->
-
-            <a href="/games/snake/" class="game-link">
-
-                <div class="game-card">
-
-                    <span class="game-icon">🐍</span>
-
-                    <h3>Snake</h3>
-
-                    <p>
-                        Eat the food, grow longer and beat your high score.
-                    </p>
-
-                    <div class="play">▶</div>
-
-                </div>
-
-            </a>
-
-<a href="/games/chess/" class="game-link">
-
-    <div class="game-card">
-
-        <span class="game-icon">♟️</span>
-
-        <h3>Chess Puzzle</h3>
-
-        <p>Find the best move and test your chess skills.</p>
-
-        <div class="play">▶</div>
-
-    </div>
-
-</a>
         </div>
-<a href="/games/commando/" class="game-link">
 
-    <div class="game-card">
 
-        <span class="game-icon">⚔️</span>
+        <!-- PUZZLE -->
 
-        <h3>Command Strike</h3>
+        <div class="game-card"
+             onclick="openGame('Puzzle', '/games/puzzle/')">
 
-        <p>Take down moving targets and survive the attack.</p>
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
 
-        <div class="play">▶</div>
+                <source src="/static/videos/puzzle.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🧩 Puzzle</h3>
+
+                <p>
+                    Challenge your brain and solve the puzzle.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- AIRPLANE -->
+
+        <div class="game-card"
+             onclick="openGame('Sky Pilot', '/games/airplane/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/airplane.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>✈️ Sky Pilot</h3>
+
+                <p>
+                    Fly through obstacles and set a high score.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- DEER -->
+
+        <div class="game-card"
+             onclick="openGame('Deer Hunter', '/games/deer/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/deer.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🦌 Deer Hunter</h3>
+
+                <p>
+                    Test your aim and hit the moving targets.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SNAKE -->
+
+        <div class="game-card"
+             onclick="openGame('Snake', '/games/snake/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/snake.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🐍 Snake</h3>
+
+                <p>
+                    Eat the food, grow longer and beat your high score.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHESS -->
+
+        <div class="game-card"
+             onclick="openGame('Chess Puzzle', '/games/chess/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/chess.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>♟️ Chess Puzzle</h3>
+
+                <p>
+                    Find the best move and test your chess skills.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ZOMBIE -->
+
+        <div class="game-card"
+             onclick="openGame('Zombie Garden', '/games/zombie/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/zombie.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🧟 Zombie Garden</h3>
+
+                <p>
+                    Defend your garden against waves of zombies.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- STREET ADVENTURE -->
+
+        <div class="game-card"
+             onclick="openGame('Street Adventure', '/games/adventure/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/adventure.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🏃‍♂️ Street Adventure</h3>
+
+                <p>
+                    Run, jump, collect coins and conquer the levels.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ROBOT3D -->
+
+        <div class="game-card"
+             onclick="openGame('Robot3D', '/games/robot3d/')">
+
+            <video class="game-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline>
+
+                <source src="/static/videos/robot3d.mp4"
+                        type="video/mp4">
+
+            </video>
+
+            <div class="game-info">
+
+                <h3>🤖 Robot3D</h3>
+
+                <p>
+                    Enter the world of Robot3D and start playing.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
 
     </div>
-<a href="/games/racing/" class="game-link">
 
-    <div class="game-card">
+</section>
 
-        <span class="game-icon">🏎️</span>
 
-        <h3>Street Racer</h3>
+<!-- =========================
+     CATEGORIES
+========================= -->
 
-        <p>Dodge traffic and become the fastest driver.</p>
+<section class="section" id="categories">
 
-        <div class="play">▶</div>
+    <div class="section-title">
+
+        <h2>🎯 Categories</h2>
 
     </div>
-<a href="/games/zombie/" class="game-link">
-    <div class="game-card">
-        <span class="game-icon">🧟</span>
-        <h3>Zombie Garden</h3>
-        <p>Defend your garden against waves of zombies.</p>
-        <div class="play">▶</div>
-    </div>
-</a>
 
-<a href="/games/adventure/" class="game-link">
-    <div class="game-card">
-        <span class="game-icon">🏃‍♂️</span>
-        <h3>Street Adventure</h3>
-        <p>Run, jump, collect coins, and conquer the levels.</p>
-        <div class="play">▶</div>
+    <div class="categories">
+
+        <div class="category">🏃 Action</div>
+
+        <div class="category">⚽ Sports</div>
+
+        <div class="category">🏎️ Racing</div>
+
+        <div class="category">🧩 Puzzle</div>
+
+        <div class="category">✈️ Flying</div>
+
+        <div class="category">🐍 Arcade</div>
+
+        <div class="category">🎯 Shooting</div>
+
     </div>
-</a>
-</a>
-<div class="game-card">
-    <h2>🤖 Robot3d</h2>
-    <p>Climb as high as you can!</p>
-    <a href="/games/robot3d/" class="play-button">PLAY GAME</a>
+
+</section>
+
+
+<!-- =========================
+     GAME PLAYER
+========================= -->
+
+<div id="gameOverlay">
+
+    <div class="game-window">
+
+        <div class="game-header">
+
+            <div class="game-title" id="gameTitle">
+                Loading...
+            </div>
+
+            <button class="close-button"
+                    onclick="closeGame()">
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- LOADING -->
+
+        <div id="loadingScreen">
+
+            <div class="loader"></div>
+
+            <div class="loading-text">
+                LOADING GAME...
+            </div>
+
+        </div>
+
+
+        <!-- GAME -->
+
+        <iframe
+            id="gameFrame"
+            src=""
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
 </div>
-</a>
-    </section>
 
 
-    <!-- CATEGORIES -->
+<!-- =========================
+     FOOTER
+========================= -->
 
-    <section class="section" id="categories">
+<footer>
 
-        <div class="section-title">
+    <p>
+        🎮 <strong>STREETGAMES</strong>
+    </p>
 
-            <h2>🎯 Categories</h2>
+    <p style="margin-top:10px;">
+        Built for fun. Play anywhere.
+    </p>
 
-        </div>
-
-
-        <div class="categories">
-
-            <div class="category">
-                🏃 Action
-            </div>
-
-            <div class="category">
-                ⚽ Sports
-            </div>
-
-            <div class="category">
-                🏎️ Racing
-            </div>
-
-            <div class="category">
-                🧩 Puzzle
-            </div>
-
-            <div class="category">
-                ✈️ Flying
-            </div>
-
-            <div class="category">
-                🐍 Arcade
-            </div>
-
-            <div class="category">
-                🎯 Shooting
-            </div>
-
-        </div>
-
-    </section>
+</footer>
 
 
-    <!-- FOOTER -->
+<script>
 
-    <footer>
+    function openGame(name, url) {
 
-        <p>
-            🎮 <strong>STREETGAMES</strong>
-        </p>
+        const overlay =
+            document.getElementById("gameOverlay");
 
-        <p style="margin-top: 10px;">
-            Built for fun. Play anywhere.
-        </p>
+        const frame =
+            document.getElementById("gameFrame");
 
-    </footer>
+        const title =
+            document.getElementById("gameTitle");
+
+        const loading =
+            document.getElementById("loadingScreen");
+
+
+        title.textContent = "🎮 " + name;
+
+        loading.style.display = "flex";
+
+        overlay.classList.add("active");
+
+
+        frame.onload = function() {
+
+            setTimeout(function() {
+
+                loading.style.display = "none";
+
+            }, 800);
+
+        };
+
+
+        frame.src = url;
+
+    }
+
+
+    function closeGame() {
+
+        const overlay =
+            document.getElementById("gameOverlay");
+
+        const frame =
+            document.getElementById("gameFrame");
+
+
+        frame.src = "";
+
+        overlay.classList.remove("active");
+
+    }
+
+
+    document.addEventListener("keydown", function(event) {
+
+        if (event.key === "Escape") {
+
+            closeGame();
+
+        }
+
+    });
+
+</script>
 
 
 </body>
-
 </html>
