@@ -1,12 +1,16 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+
+// =========================
+// SCENE
+// =========================
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87ceeb);
-
-scene.fog = new THREE.Fog(0x87ceeb, 25, 100);
+scene.background = new THREE.Color(0x111827);
+scene.fog = new THREE.Fog(0x111827, 30, 100);
 
 const camera = new THREE.PerspectiveCamera(
-    70,
+    60,
     window.innerWidth / window.innerHeight,
     0.1,
     200
@@ -17,365 +21,476 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 document.body.appendChild(renderer.domElement);
 
-
-// =============================
+// =========================
 // LIGHTING
-// =============================
+// =========================
 
-const sunlight = new THREE.DirectionalLight(
-    0xffffff,
-    2
-);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(ambientLight);
 
-sunlight.position.set(20, 30, 10);
-sunlight.castShadow = true;
+const moonLight = new THREE.DirectionalLight(0xffffff, 2);
+moonLight.position.set(20, 40, 20);
+moonLight.castShadow = true;
+scene.add(moonLight);
 
-scene.add(sunlight);
+// =========================
+// MATERIALS
+// =========================
 
-const ambient = new THREE.AmbientLight(
-    0xffffff,
-    0.6
-);
-
-scene.add(ambient);
-
-
-// =============================
-// GROUND
-// =============================
-
-const groundGeometry = new THREE.BoxGeometry(
-    100,
-    1,
-    12
-);
-
-const groundMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3b9b45
+const stoneMaterial = new THREE.MeshStandardMaterial({
+    color: 0x666666,
+    roughness: 0.9
 });
 
+const darkStoneMaterial = new THREE.MeshStandardMaterial({
+    color: 0x444444,
+    roughness: 0.9
+});
+
+const roofMaterial = new THREE.MeshStandardMaterial({
+    color: 0x292929,
+    roughness: 0.8
+});
+
+const woodMaterial = new THREE.MeshStandardMaterial({
+    color: 0x4a2814,
+    roughness: 0.9
+});
+
+// =========================
+// GROUND
+// =========================
+
 const ground = new THREE.Mesh(
-    groundGeometry,
-    groundMaterial
+    new THREE.BoxGeometry(100, 1, 12),
+    stoneMaterial
 );
 
 ground.position.set(0, -0.5, 0);
 ground.receiveShadow = true;
-
 scene.add(ground);
 
+// =========================
+// CASTLE BACK WALL
+// =========================
 
-// =============================
-// PLAYER
-// =============================
-
-const player = new THREE.Group();
-
-const body = new THREE.Mesh(
-    new THREE.BoxGeometry(0.9, 1.2, 0.8),
-    new THREE.MeshStandardMaterial({
-        color: 0x2878ff
-    })
+const castleWall = new THREE.Mesh(
+    new THREE.BoxGeometry(100, 12, 1),
+    stoneMaterial
 );
 
-body.position.y = 0.6;
-body.castShadow = true;
+castleWall.position.set(0, 5.5, -5);
+castleWall.castShadow = true;
+scene.add(castleWall);
 
-player.add(body);
+// =========================
+// CASTLE TOWERS
+// =========================
 
+function createTower(x) {
 
-const head = new THREE.Mesh(
-    new THREE.SphereGeometry(0.45, 16, 16),
-    new THREE.MeshStandardMaterial({
-        color: 0xffc18a
-    })
+    const tower = new THREE.Mesh(
+        new THREE.CylinderGeometry(2.5, 2.5, 12, 12),
+        stoneMaterial
+    );
+
+    tower.position.set(x, 5.5, -4);
+    tower.castShadow = true;
+    tower.receiveShadow = true;
+
+    scene.add(tower);
+
+    const roof = new THREE.Mesh(
+        new THREE.ConeGeometry(3.3, 4, 12),
+        roofMaterial
+    );
+
+    roof.position.set(x, 13.5, -4);
+    roof.castShadow = true;
+
+    scene.add(roof);
+
+    // Battlements
+    for (let i = 0; i < 8; i++) {
+
+        const block = new THREE.Mesh(
+            new THREE.BoxGeometry(0.6, 1, 0.6),
+            stoneMaterial
+        );
+
+        const angle = (i / 8) * Math.PI * 2;
+
+        block.position.set(
+            x + Math.cos(angle) * 2.2,
+            12,
+            -4 + Math.sin(angle) * 2.2
+        );
+
+        scene.add(block);
+    }
+
+    // Windows
+    for (let y = 4; y <= 9; y += 2) {
+
+        const windowMesh = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5, 1, 0.2),
+            new THREE.MeshStandardMaterial({
+                color: 0xffff66,
+                emissive: 0xffaa00,
+                emissiveIntensity: 1
+            })
+        );
+
+        windowMesh.position.set(x, y, -1.55);
+        scene.add(windowMesh);
+    }
+}
+
+createTower(-35);
+createTower(-15);
+createTower(15);
+createTower(35);
+
+// =========================
+// CASTLE GATE
+// =========================
+
+const gate = new THREE.Mesh(
+    new THREE.BoxGeometry(7, 7, 1),
+    woodMaterial
 );
 
-head.position.y = 1.45;
-head.castShadow = true;
+gate.position.set(31.5, 3, -4.2);
+gate.castShadow = true;
+scene.add(gate);
 
-player.add(head);
+// Gate arch
+const gateTop = new THREE.Mesh(
+    new THREE.TorusGeometry(3.5, 0.5, 8, 20, Math.PI),
+    stoneMaterial
+);
 
+gateTop.position.set(31.5, 6.5, -4.7);
+gateTop.rotation.z = Math.PI;
+scene.add(gateTop);
 
-player.position.set(-35, 0, 0);
-
-scene.add(player);
-
-
-// =============================
+// =========================
 // PLATFORMS
-// =============================
+// =========================
 
 const platforms = [];
 
-function createPlatform(x, y, z, width, height = 0.6) {
-
-    const geometry = new THREE.BoxGeometry(
-        width,
-        height,
-        3
-    );
-
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x8b5a2b
-    });
+function createPlatform(x, y, width) {
 
     const platform = new THREE.Mesh(
-        geometry,
-        material
+        new THREE.BoxGeometry(width, 0.6, 3),
+        darkStoneMaterial
     );
 
-    platform.position.set(x, y, z);
-
+    platform.position.set(x, y, 0);
     platform.castShadow = true;
     platform.receiveShadow = true;
 
     scene.add(platform);
-
     platforms.push(platform);
 }
 
+createPlatform(-30, 1.5, 6);
+createPlatform(-20, 3, 6);
+createPlatform(-8, 1.5, 5);
+createPlatform(2, 3, 6);
+createPlatform(13, 1.5, 5);
+createPlatform(24, 3, 6);
 
-// Main path
+// =========================
+// PLAYER
+// =========================
 
-createPlatform(-25, 1.5, 0, 6);
-createPlatform(-16, 2.5, 0, 5);
-createPlatform(-7, 1.5, 0, 7);
-createPlatform(3, 3, 0, 5);
-createPlatform(13, 1.5, 0, 7);
-createPlatform(24, 2.5, 0, 6);
+const player = new THREE.Group();
 
+player.position.set(-45, 0, 0);
 
-// =============================
+scene.add(player);
+
+let playerModel = null;
+let mixer = null;
+
+const animationActions = {};
+let currentAction = null;
+
+const loader = new GLTFLoader();
+
+loader.load(
+    "character.glb",
+
+    function (gltf) {
+
+        console.log("Character loaded!");
+
+        playerModel = gltf.scene;
+
+        // Change this if your character is too big/small
+        playerModel.scale.set(1.5, 1.5, 1.5);
+
+        playerModel.position.set(0, 0, 0);
+
+        playerModel.traverse(function (object) {
+
+            if (object.isMesh) {
+                object.castShadow = true;
+                object.receiveShadow = true;
+            }
+
+        });
+
+        player.add(playerModel);
+
+        // Animations
+        if (gltf.animations.length > 0) {
+
+            mixer = new THREE.AnimationMixer(playerModel);
+
+            gltf.animations.forEach(function (clip) {
+
+                const name = clip.name.toLowerCase();
+
+                animationActions[name] =
+                    mixer.clipAction(clip);
+
+            });
+
+            console.log(
+                "Animations:",
+                gltf.animations.map(a => a.name)
+            );
+
+            playAnimation("idle");
+        }
+    },
+
+    function (progress) {
+
+        if (progress.total) {
+
+            console.log(
+                "Character loading:",
+                Math.round(
+                    progress.loaded / progress.total * 100
+                ) + "%"
+            );
+        }
+    },
+
+    function (error) {
+
+        console.error(
+            "ERROR loading character.glb:",
+            error
+        );
+    }
+);
+
+// =========================
+// ANIMATION
+// =========================
+
+function findAnimation(words) {
+
+    for (const name in animationActions) {
+
+        for (const word of words) {
+
+            if (name.includes(word)) {
+                return animationActions[name];
+            }
+        }
+    }
+
+    return null;
+}
+
+function playAnimation(type) {
+
+    if (!mixer) return;
+
+    let action = null;
+
+    if (type === "run") {
+
+        action = findAnimation([
+            "run",
+            "running",
+            "walk",
+            "walking"
+        ]);
+    }
+
+    if (type === "jump") {
+
+        action = findAnimation([
+            "jump",
+            "jumping"
+        ]);
+    }
+
+    if (type === "idle") {
+
+        action = findAnimation([
+            "idle",
+            "stand",
+            "standing"
+        ]);
+    }
+
+    if (!action) {
+
+        action = Object.values(animationActions)[0];
+    }
+
+    if (!action) return;
+
+    if (currentAction === action) return;
+
+    if (currentAction) {
+        currentAction.fadeOut(0.15);
+    }
+
+    action.reset();
+    action.fadeIn(0.15);
+    action.play();
+
+    currentAction = action;
+}
+
+// =========================
 // COINS
-// =============================
+// =========================
 
 const coins = [];
 
-function createCoin(x, y, z) {
-
-    const geometry = new THREE.TorusGeometry(
-        0.35,
-        0.1,
-        12,
-        24
-    );
-
-    const material = new THREE.MeshStandardMaterial({
-        color: 0xffd700,
-        emissive: 0x996600
-    });
+function createCoin(x, y) {
 
     const coin = new THREE.Mesh(
-        geometry,
-        material
+        new THREE.TorusGeometry(0.35, 0.12, 8, 16),
+        new THREE.MeshStandardMaterial({
+            color: 0xffd700,
+            emissive: 0xffaa00,
+            emissiveIntensity: 0.7
+        })
     );
 
-    coin.position.set(x, y, z);
-
-    coin.rotation.x = Math.PI / 2;
+    coin.position.set(x, y, 0);
 
     scene.add(coin);
 
     coins.push(coin);
 }
 
+createCoin(-30, 3);
+createCoin(-20, 4.5);
+createCoin(-8, 3);
+createCoin(2, 4.5);
+createCoin(13, 3);
+createCoin(24, 4.5);
 
-createCoin(-27, 3, 0);
-createCoin(-25, 3, 0);
-createCoin(-16, 4, 0);
-createCoin(-7, 3, 0);
-createCoin(3, 4.5, 0);
-createCoin(13, 3, 0);
-createCoin(24, 4, 0);
-
-
-// =============================
+// =========================
 // ENEMIES
-// =============================
+// =========================
 
 const enemies = [];
 
-function createEnemy(x, z) {
+function createEnemy(x) {
 
-    const enemy = new THREE.Group();
-
-    const body = new THREE.Mesh(
-        new THREE.BoxGeometry(0.9, 1, 0.8),
+    const enemy = new THREE.Mesh(
+        new THREE.SphereGeometry(0.7, 16, 16),
         new THREE.MeshStandardMaterial({
-            color: 0x7b2cff
+            color: 0x8b0000
         })
     );
 
-    body.position.y = 0.5;
-    body.castShadow = true;
-
-    enemy.add(body);
-
-
-    const head = new THREE.Mesh(
-        new THREE.SphereGeometry(0.4, 16, 16),
-        new THREE.MeshStandardMaterial({
-            color: 0x66cc66
-        })
-    );
-
-    head.position.y = 1.25;
-    head.castShadow = true;
-
-    enemy.add(head);
-
-
-    enemy.position.set(x, 0, z);
+    enemy.position.set(x, 0.7, 0);
+    enemy.castShadow = true;
 
     scene.add(enemy);
 
     enemies.push({
         mesh: enemy,
-        speed: 0.015 + Math.random() * 0.01,
-        alive: true
+        direction: 1
     });
 }
 
+createEnemy(-25);
+createEnemy(-2);
+createEnemy(18);
 
-createEnemy(-20, 0);
-createEnemy(-2, 0);
-createEnemy(10, 0);
-createEnemy(20, 0);
-
-
-// =============================
-// TREES
-// =============================
-
-function createTree(x, z) {
-
-    const tree = new THREE.Group();
-
-
-    const trunk = new THREE.Mesh(
-        new THREE.CylinderGeometry(
-            0.3,
-            0.4,
-            2,
-            10
-        ),
-        new THREE.MeshStandardMaterial({
-            color: 0x704214
-        })
-    );
-
-    trunk.position.y = 1;
-
-    tree.add(trunk);
-
-
-    const leaves = new THREE.Mesh(
-        new THREE.SphereGeometry(
-            1.4,
-            16,
-            16
-        ),
-        new THREE.MeshStandardMaterial({
-            color: 0x228b22
-        })
-    );
-
-    leaves.position.y = 2.5;
-
-    tree.add(leaves);
-
-    tree.position.set(x, 0, z);
-
-    scene.add(tree);
-}
-
-
-createTree(-30, -4);
-createTree(-10, -4);
-createTree(8, -4);
-createTree(28, -4);
-
-
-// =============================
+// =========================
 // FINISH FLAG
-// =============================
+// =========================
 
-const flag = new THREE.Group();
-
-const pole = new THREE.Mesh(
+const flagPole = new THREE.Mesh(
     new THREE.CylinderGeometry(
         0.08,
         0.08,
-        4,
-        10
+        5,
+        8
     ),
     new THREE.MeshStandardMaterial({
         color: 0xffffff
     })
 );
 
-pole.position.y = 2;
+flagPole.position.set(31.5, 2.5, 0);
 
-flag.add(pole);
+scene.add(flagPole);
 
-
-const flagShape = new THREE.Mesh(
-    new THREE.BoxGeometry(
-        1.5,
-        0.8,
-        0.1
-    ),
+const flag = new THREE.Mesh(
+    new THREE.BoxGeometry(2, 1.2, 0.1),
     new THREE.MeshStandardMaterial({
-        color: 0xff3333
+        color: 0x55ff88,
+        emissive: 0x226633
     })
 );
 
-flagShape.position.set(
-    0.7,
-    3.3,
-    0
-);
-
-flag.add(flagShape);
-
-flag.position.set(30, 0, 0);
+flag.position.set(32.4, 4, 0);
 
 scene.add(flag);
 
-
-// =============================
+// =========================
 // CONTROLS
-// =============================
+// =========================
 
 const keys = {};
 
-window.addEventListener("keydown", event => {
+document.addEventListener("keydown", function(event) {
 
     keys[event.code] = true;
 
     if (
         event.code === "Space" &&
-        player.position.y <= 0.05
+        Math.abs(velocityY) < 0.001
     ) {
+
         velocityY = 0.25;
+
+        playAnimation("jump");
     }
+
 });
 
-
-window.addEventListener("keyup", event => {
+document.addEventListener("keyup", function(event) {
 
     keys[event.code] = false;
 });
 
-
-// =============================
-// PHYSICS
-// =============================
+// =========================
+// GAME VARIABLES
+// =========================
 
 let velocityY = 0;
 
@@ -388,254 +503,277 @@ let score = 0;
 let gameStarted = false;
 let gameFinished = false;
 
-
-// =============================
+// =========================
 // START BUTTON
-// =============================
+// =========================
 
-document.getElementById("startButton").addEventListener(
-    "click",
-    () => {
+document
+    .getElementById("startButton")
+    .addEventListener("click", function() {
 
         gameStarted = true;
 
-        document.getElementById(
-            "message"
-        ).classList.add("hidden");
-    }
-);
+        document
+            .getElementById("message")
+            .classList.add("hidden");
 
+        playAnimation("idle");
+    });
 
-// =============================
+// =========================
 // PLAYER MOVEMENT
-// =============================
+// =========================
 
-function updatePlayer() {
+function updatePlayer(delta) {
 
     if (!gameStarted || gameFinished) return;
 
+    const speed = 0.12;
 
-    let speed = 0.12;
+    const movingRight =
+        keys.ArrowRight ||
+        keys.KeyD;
 
+    const movingLeft =
+        keys.ArrowLeft ||
+        keys.KeyA;
 
-    if (
-        keys["ArrowLeft"] ||
-        keys["KeyA"]
-    ) {
-        player.position.x -= speed;
-    }
+    if (movingRight) {
 
-
-    if (
-        keys["ArrowRight"] ||
-        keys["KeyD"]
-    ) {
         player.position.x += speed;
+
+        if (playerModel) {
+            playerModel.rotation.y = Math.PI / 2;
+        }
     }
 
+    if (movingLeft) {
 
-    // Gravity
+        player.position.x -= speed;
+
+        if (playerModel) {
+            playerModel.rotation.y = -Math.PI / 2;
+        }
+    }
+
+    // Vertical movement
+    const oldY = player.position.y;
 
     velocityY += gravity;
 
     player.position.y += velocityY;
 
-
-    // Ground
-
-    if (player.position.y < 0) {
+    // Ground collision
+    if (player.position.y <= 0) {
 
         player.position.y = 0;
 
         velocityY = 0;
     }
 
+    // Platform collision
+    for (const platform of platforms) {
 
-    // Camera
+        const width =
+            platform.geometry.parameters.width;
 
-    camera.position.x =
-        player.position.x + 6;
+        const height =
+            platform.geometry.parameters.height;
 
-    camera.position.y = 6;
+        const platformLeft =
+            platform.position.x - width / 2;
 
-    camera.position.z = 12;
+        const platformRight =
+            platform.position.x + width / 2;
 
-    camera.lookAt(
-        player.position.x + 5,
-        1,
-        0
-    );
+        const platformTop =
+            platform.position.y + height / 2;
+
+        const playerLeft =
+            player.position.x - 0.5;
+
+        const playerRight =
+            player.position.x + 0.5;
+
+        const horizontalOverlap =
+            playerRight > platformLeft &&
+            playerLeft < platformRight;
+
+        const crossedPlatform =
+            oldY <= platformTop &&
+            player.position.y >= platformTop;
+
+        if (
+            velocityY <= 0 &&
+            horizontalOverlap &&
+            crossedPlatform
+        ) {
+
+            player.position.y = platformTop;
+
+            velocityY = 0;
+        }
+    }
+
+    // Animation
+    if (mixer) {
+
+        mixer.update(delta);
+
+        if (velocityY > 0.02) {
+
+            playAnimation("jump");
+        }
+        else if (movingRight || movingLeft) {
+
+            playAnimation("run");
+        }
+        else {
+
+            playAnimation("idle");
+        }
+    }
 }
 
-
-// =============================
-// COIN COLLECTION
-// =============================
+// =========================
+// COIN UPDATE
+// =========================
 
 function updateCoins() {
 
-    coins.forEach((coin, index) => {
+    for (let i = coins.length - 1; i >= 0; i--) {
 
-        coin.rotation.z += 0.05;
+        const coin = coins[i];
+
+        coin.rotation.y += 0.06;
 
         const distance =
             player.position.distanceTo(
                 coin.position
             );
 
-        if (distance < 1.2) {
+        if (distance < 1.5) {
 
             scene.remove(coin);
 
-            coins.splice(index, 1);
+            coins.splice(i, 1);
 
             coinCount++;
+
             score += 100;
 
-            updateHUD();
+            document.getElementById("coins")
+                .textContent = coinCount;
+
+            document.getElementById("score")
+                .textContent = score;
         }
-    });
+    }
 }
 
-
-// =============================
-// ENEMIES
-// =============================
+// =========================
+// ENEMY UPDATE
+// =========================
 
 function updateEnemies() {
 
-    enemies.forEach(enemy => {
+    for (const enemy of enemies) {
 
-        if (!enemy.alive) return;
+        enemy.mesh.position.x +=
+            enemy.direction * 0.02;
 
+        if (
+            enemy.mesh.position.x > 30 ||
+            enemy.mesh.position.x < -40
+        ) {
 
-        enemy.mesh.position.x -=
-            enemy.speed;
-
+            enemy.direction *= -1;
+        }
 
         const distance =
             player.position.distanceTo(
                 enemy.mesh.position
             );
 
-
-        if (distance < 1.3) {
-
-            enemy.alive = false;
-
-            scene.remove(enemy.mesh);
+        if (distance < 1.2) {
 
             lives--;
 
-            updateHUD();
+            document.getElementById("lives")
+                .textContent = lives;
 
+            player.position.set(-45, 0, 0);
+
+            velocityY = 0;
 
             if (lives <= 0) {
 
-                endGame();
+                gameFinished = true;
+
+                document
+                    .getElementById("gameOver")
+                    .classList.remove("hidden");
             }
         }
-    });
+    }
 }
 
-
-// =============================
+// =========================
 // FINISH
-// =============================
+// =========================
 
 function checkFinish() {
 
-    if (
-        player.position.x >
-        flag.position.x - 1
-    ) {
+    if (player.position.x >= 31) {
 
         gameFinished = true;
 
-        document.getElementById(
-            "finalCoins"
-        ).textContent = coinCount;
+        document.getElementById("finalCoins")
+            .textContent = coinCount;
 
-        document.getElementById(
-            "finalScore"
-        ).textContent = score;
+        document.getElementById("finalScore")
+            .textContent = score;
 
-        document.getElementById(
-            "levelComplete"
-        ).classList.remove("hidden");
+        document
+            .getElementById("levelComplete")
+            .classList.remove("hidden");
     }
 }
 
+// =========================
+// CAMERA
+// =========================
 
-// =============================
-// GAME OVER
-// =============================
+function updateCamera() {
 
-function endGame() {
+    camera.position.x +=
+        (
+            player.position.x + 8 -
+            camera.position.x
+        ) * 0.08;
 
-    gameFinished = true;
+    camera.position.y +=
+        (
+            6 -
+            camera.position.y
+        ) * 0.08;
 
-    document.getElementById(
-        "finalScore"
-    ).textContent = score;
+    camera.position.z = 18;
 
-    document.getElementById(
-        "gameOver"
-    ).classList.remove("hidden");
-}
-
-
-// =============================
-// HUD
-// =============================
-
-function updateHUD() {
-
-    document.getElementById(
-        "lives"
-    ).textContent = lives;
-
-    document.getElementById(
-        "coins"
-    ).textContent = coinCount;
-
-    document.getElementById(
-        "score"
-    ).textContent = score;
-}
-
-
-// =============================
-// ANIMATION
-// =============================
-
-function animate() {
-
-    requestAnimationFrame(animate);
-
-
-    if (gameStarted && !gameFinished) {
-
-        updatePlayer();
-
-        updateCoins();
-
-        updateEnemies();
-
-        checkFinish();
-    }
-
-
-    renderer.render(
-        scene,
-        camera
+    camera.lookAt(
+        player.position.x + 4,
+        3,
+        0
     );
 }
 
+// =========================
+// RESIZE
+// =========================
 
 window.addEventListener(
     "resize",
-    () => {
+    function() {
 
         camera.aspect =
             window.innerWidth /
@@ -650,7 +788,35 @@ window.addEventListener(
     }
 );
 
+// =========================
+// GAME LOOP
+// =========================
 
-updateHUD();
+const clock = new THREE.Clock();
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    const delta =
+        Math.min(clock.getDelta(), 0.05);
+
+    updatePlayer(delta);
+
+    updateCoins();
+
+    updateEnemies();
+
+    checkFinish();
+
+    updateCamera();
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+camera.position.set(-35, 6, 18);
 
 animate();
