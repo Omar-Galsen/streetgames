@@ -1,8 +1,12 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// =====================================================
+// IMAGES
+// =====================================================
+
 const background = new Image();
-background.src = "assets/background.png";
+background.src = "assets/background2.png";
 
 const robotImage = new Image();
 robotImage.src = "assets/robot.png";
@@ -10,40 +14,41 @@ robotImage.src = "assets/robot.png";
 const platformImage = new Image();
 platformImage.src = "assets/platform.png";
 
+const bulletImage = new Image();
+bulletImage.src = "assets/enemy/bullet.png";
 
-// ================================
-// ENEMY ANIMATIONS
-// ================================
+
+// =====================================================
+// ENEMY IMAGES
+// =====================================================
 
 const enemyAnimations = {
     idle: [],
-    walk: [],
-    attack: [],
     hit: [],
     death: []
 };
 
 function loadAnimation(name, count) {
+
     for (let i = 1; i <= count; i++) {
+
         const image = new Image();
-        image.src = `assets/enemy/${name}/${name}_${i}.png`;
+
+        image.src =
+            `assets/enemy/${name}/${name}_${i}.png`;
+
         enemyAnimations[name].push(image);
     }
 }
 
 loadAnimation("idle", 4);
-loadAnimation("walk", 6);
-loadAnimation("attack", 4);
 loadAnimation("hit", 4);
 loadAnimation("death", 6);
 
-const bulletImage = new Image();
-bulletImage.src = "assets/enemy/bullet.png";
 
-
-// ================================
+// =====================================================
 // SETTINGS
-// ================================
+// =====================================================
 
 const WORLD_WIDTH = 6000;
 
@@ -52,12 +57,12 @@ const MOVE_SPEED = 450;
 const JUMP_FORCE = 800;
 
 const BULLET_SPEED = 900;
-const SHOOT_COOLDOWN = 0.3;
+const SHOOT_COOLDOWN = 0.25;
 
 
-// ================================
-// GAME
-// ================================
+// =====================================================
+// GAME VARIABLES
+// =====================================================
 
 let gameRunning = false;
 let gamePaused = false;
@@ -70,11 +75,12 @@ let camera = {
 };
 
 
-// ================================
+// =====================================================
 // PLAYER
-// ================================
+// =====================================================
 
 const player = {
+
     x: 150,
     y: 0,
 
@@ -89,12 +95,13 @@ const player = {
     facing: 1,
 
     shootTimer: 0
+
 };
 
 
-// ================================
+// =====================================================
 // INPUT
-// ================================
+// =====================================================
 
 const keys = {};
 
@@ -109,8 +116,11 @@ window.addEventListener("keydown", function(event) {
     keys[key] = true;
 
     if (event.code === "Space") {
+
         event.preventDefault();
+
         jumpPressed = true;
+
     }
 
     if (key === "w") {
@@ -136,13 +146,15 @@ window.addEventListener("keyup", function(event) {
 
 
 canvas.addEventListener("mousedown", function() {
+
     shootPressed = true;
+
 });
 
 
-// ================================
+// =====================================================
 // RESIZE
-// ================================
+// =====================================================
 
 function resizeCanvas() {
 
@@ -151,27 +163,32 @@ function resizeCanvas() {
 
     updateGround();
     updatePlatforms();
+    updateCoins();
+    updateEnemyPositions();
 
 }
 
 window.addEventListener("resize", resizeCanvas);
 
 
-// ================================
+// =====================================================
 // GROUND
-// ================================
+// =====================================================
 
 const ground = {
+
     x: 0,
     y: 0,
     width: WORLD_WIDTH,
     height: 300
+
 };
 
 
 function updateGround() {
 
-    ground.y = canvas.height * 0.875;
+    ground.y =
+        canvas.height * 0.875;
 
     ground.height =
         canvas.height - ground.y;
@@ -179,9 +196,9 @@ function updateGround() {
 }
 
 
-// ================================
+// =====================================================
 // PLATFORMS
-// ================================
+// =====================================================
 
 const platforms = [
 
@@ -210,19 +227,22 @@ function updatePlatforms() {
         0.58
     ];
 
-    platforms.forEach((platform, index) => {
+    platforms.forEach(
+        (platform, index) => {
 
-        platform.y =
-            canvas.height * heights[index];
+            platform.y =
+                canvas.height *
+                heights[index];
 
-    });
+        }
+    );
 
 }
 
 
-// ================================
+// =====================================================
 // COINS
-// ================================
+// =====================================================
 
 const coins = [
 
@@ -240,31 +260,37 @@ const coins = [
 
 function updateCoins() {
 
-    coins.forEach((coin, index) => {
+    coins.forEach(
+        (coin, index) => {
 
-        if (platforms[index]) {
+            if (platforms[index]) {
 
-            coin.y =
-                platforms[index].y - 70;
+                coin.y =
+                    platforms[index].y -
+                    70;
+
+            }
 
         }
-
-    });
+    );
 
 }
 
 
-// ================================
+// =====================================================
 // ENEMIES
-// ================================
+// =====================================================
 
 const enemies = [
 
     {
         x: 850,
         y: 0,
+
         width: 90,
         height: 90,
+
+        velocityX: 0,
 
         health: 3,
         maxHealth: 3,
@@ -273,12 +299,13 @@ const enemies = [
         endX: 1000,
 
         direction: 1,
+
         speed: 70,
 
-        state: "walk",
+        state: "idle",
 
         frame: 0,
-        timer: 0,
+        animationTimer: 0,
 
         hitTimer: 0,
         deathTimer: 0,
@@ -286,25 +313,30 @@ const enemies = [
         alive: true
     },
 
+
     {
-        x: 2050,
+        x: 1400,
         y: 0,
+
         width: 90,
         height: 90,
+
+        velocityX: 0,
 
         health: 3,
         maxHealth: 3,
 
-        startX: 1850,
-        endX: 2150,
+        startX: 1250,
+        endX: 1550,
 
         direction: -1,
+
         speed: 80,
 
-        state: "walk",
+        state: "idle",
 
         frame: 0,
-        timer: 0,
+        animationTimer: 0,
 
         hitTimer: 0,
         deathTimer: 0,
@@ -312,11 +344,46 @@ const enemies = [
         alive: true
     },
 
+
+    {
+        x: 2050,
+        y: 0,
+
+        width: 90,
+        height: 90,
+
+        velocityX: 0,
+
+        health: 4,
+        maxHealth: 4,
+
+        startX: 1850,
+        endX: 2150,
+
+        direction: 1,
+
+        speed: 85,
+
+        state: "idle",
+
+        frame: 0,
+        animationTimer: 0,
+
+        hitTimer: 0,
+        deathTimer: 0,
+
+        alive: true
+    },
+
+
     {
         x: 3250,
         y: 0,
+
         width: 90,
         height: 90,
+
+        velocityX: 0,
 
         health: 4,
         maxHealth: 4,
@@ -324,13 +391,14 @@ const enemies = [
         startX: 3050,
         endX: 3350,
 
-        direction: 1,
+        direction: -1,
+
         speed: 90,
 
-        state: "walk",
+        state: "idle",
 
         frame: 0,
-        timer: 0,
+        animationTimer: 0,
 
         hitTimer: 0,
         deathTimer: 0,
@@ -338,25 +406,30 @@ const enemies = [
         alive: true
     },
 
+
     {
         x: 4550,
         y: 0,
+
         width: 90,
         height: 90,
 
-        health: 4,
-        maxHealth: 4,
+        velocityX: 0,
+
+        health: 5,
+        maxHealth: 5,
 
         startX: 4450,
         endX: 4750,
 
-        direction: -1,
+        direction: 1,
+
         speed: 100,
 
-        state: "walk",
+        state: "idle",
 
         frame: 0,
-        timer: 0,
+        animationTimer: 0,
 
         hitTimer: 0,
         deathTimer: 0,
@@ -367,27 +440,29 @@ const enemies = [
 ];
 
 
-// ================================
+// =====================================================
 // BULLETS
-// ================================
+// =====================================================
 
 const bullets = [];
 
 
-// ================================
+// =====================================================
 // FINISH
-// ================================
+// =====================================================
 
 const finish = {
+
     x: 5600,
     width: 100,
     height: 180
+
 };
 
 
-// ================================
+// =====================================================
 // PLAYER RESET
-// ================================
+// =====================================================
 
 function resetPlayer() {
 
@@ -411,9 +486,9 @@ function resetPlayer() {
 }
 
 
-// ================================
+// =====================================================
 // HUD
-// ================================
+// =====================================================
 
 function updateHUD() {
 
@@ -428,16 +503,14 @@ function updateHUD() {
 }
 
 
-// ================================
+// =====================================================
 // PLAYER UPDATE
-// ================================
+// =====================================================
 
 function updatePlayer(deltaTime) {
 
     let moving = false;
 
-
-    // LEFT
 
     if (
         keys["a"] ||
@@ -453,8 +526,6 @@ function updatePlayer(deltaTime) {
 
     }
 
-
-    // RIGHT
 
     if (
         keys["d"] ||
@@ -473,12 +544,13 @@ function updatePlayer(deltaTime) {
 
     if (!moving) {
 
-        player.velocityX *= 0.80;
+        player.velocityX *=
+            Math.pow(0.001, deltaTime);
 
     }
 
 
-    // JUMP
+    // Jump
 
     if (
         jumpPressed &&
@@ -495,10 +567,11 @@ function updatePlayer(deltaTime) {
     jumpPressed = false;
 
 
-    // GRAVITY
+    // Gravity
 
     player.velocityY +=
-        GRAVITY * deltaTime;
+        GRAVITY *
+        deltaTime;
 
 
     const oldY =
@@ -514,11 +587,14 @@ function updatePlayer(deltaTime) {
         deltaTime;
 
 
-    // WORLD LIMIT
+    // World limits
 
     if (player.x < 0) {
+
         player.x = 0;
+
     }
+
 
     if (
         player.x +
@@ -536,7 +612,7 @@ function updatePlayer(deltaTime) {
     player.grounded = false;
 
 
-    // GROUND
+    // Ground collision
 
     if (
         player.y +
@@ -555,11 +631,13 @@ function updatePlayer(deltaTime) {
     }
 
 
-    // PLATFORMS
+    // Platform collision
 
-    for (const platform of platforms) {
+    for (
+        const platform of platforms
+    ) {
 
-        const playerBottom =
+        const bottom =
             player.y +
             player.height;
 
@@ -579,8 +657,10 @@ function updatePlayer(deltaTime) {
 
         const falling =
             player.velocityY >= 0 &&
-            oldBottom <= platform.y &&
-            playerBottom >= platform.y;
+            oldBottom <=
+            platform.y &&
+            bottom >=
+            platform.y;
 
 
         if (
@@ -601,7 +681,7 @@ function updatePlayer(deltaTime) {
     }
 
 
-    // SHOOT TIMER
+    // Shooting
 
     if (
         player.shootTimer > 0
@@ -612,8 +692,6 @@ function updatePlayer(deltaTime) {
 
     }
 
-
-    // SHOOT
 
     if (
         shootPressed &&
@@ -630,7 +708,7 @@ function updatePlayer(deltaTime) {
     shootPressed = false;
 
 
-    // FALL
+    // Falling
 
     if (
         player.y >
@@ -644,9 +722,9 @@ function updatePlayer(deltaTime) {
 }
 
 
-// ================================
+// =====================================================
 // SHOOT
-// ================================
+// =====================================================
 
 function shoot() {
 
@@ -656,14 +734,14 @@ function shoot() {
             player.facing === 1
                 ? player.x +
                   player.width
-                : player.x - 40,
+                : player.x - 35,
 
         y:
             player.y +
-            player.height * 0.45,
+            player.height * 0.43,
 
-        width: 40,
-        height: 40,
+        width: 42,
+        height: 42,
 
         velocityX:
             BULLET_SPEED *
@@ -676,13 +754,15 @@ function shoot() {
 }
 
 
-// ================================
-// BULLET UPDATE
-// ================================
+// =====================================================
+// BULLETS
+// =====================================================
 
 function updateBullets(deltaTime) {
 
-    for (const bullet of bullets) {
+    for (
+        const bullet of bullets
+    ) {
 
         bullet.x +=
             bullet.velocityX *
@@ -700,7 +780,9 @@ function updateBullets(deltaTime) {
         }
 
 
-        for (const enemy of enemies) {
+        for (
+            const enemy of enemies
+        ) {
 
             if (!enemy.alive) {
                 continue;
@@ -757,9 +839,9 @@ function updateBullets(deltaTime) {
 }
 
 
-// ================================
-// HIT ENEMY
-// ================================
+// =====================================================
+// ENEMY HIT
+// =====================================================
 
 function hitEnemy(enemy) {
 
@@ -772,11 +854,11 @@ function hitEnemy(enemy) {
 
     enemy.state = "hit";
 
-    enemy.hitTimer = 0.30;
+    enemy.hitTimer = 0.35;
 
     enemy.frame = 0;
 
-    enemy.timer = 0;
+    enemy.animationTimer = 0;
 
 
     if (
@@ -789,7 +871,7 @@ function hitEnemy(enemy) {
 
         enemy.frame = 0;
 
-        enemy.timer = 0;
+        enemy.animationTimer = 0;
 
         enemy.deathTimer = 0.8;
 
@@ -798,20 +880,24 @@ function hitEnemy(enemy) {
 }
 
 
-// ================================
+// =====================================================
 // ENEMY UPDATE
-// ================================
+// =====================================================
 
 function updateEnemies(deltaTime) {
 
-    for (const enemy of enemies) {
+    for (
+        const enemy of enemies
+    ) {
+
+        // Death
 
         if (!enemy.alive) {
 
             enemy.deathTimer -=
                 deltaTime;
 
-            updateAnimation(
+            updateEnemyAnimation(
                 enemy,
                 "death",
                 deltaTime
@@ -822,7 +908,7 @@ function updateEnemies(deltaTime) {
         }
 
 
-        // HIT
+        // Hit
 
         if (
             enemy.hitTimer > 0
@@ -831,7 +917,7 @@ function updateEnemies(deltaTime) {
             enemy.hitTimer -=
                 deltaTime;
 
-            updateAnimation(
+            updateEnemyAnimation(
                 enemy,
                 "hit",
                 deltaTime
@@ -842,18 +928,44 @@ function updateEnemies(deltaTime) {
         }
 
 
-        // WALK
+        // =========================================
+        // SMOOTH SLIDING
+        // =========================================
+
+        const targetVelocity =
+            enemy.speed *
+            enemy.direction;
+
+
+        // Smooth acceleration
+
+        enemy.velocityX +=
+            (
+                targetVelocity -
+                enemy.velocityX
+            ) *
+            Math.min(
+                1,
+                deltaTime * 10
+            );
+
+
+        // Move
 
         enemy.x +=
-            enemy.speed *
-            enemy.direction *
+            enemy.velocityX *
             deltaTime;
 
+
+        // Turn around
 
         if (
             enemy.x <=
             enemy.startX
         ) {
+
+            enemy.x =
+                enemy.startX;
 
             enemy.direction = 1;
 
@@ -866,30 +978,31 @@ function updateEnemies(deltaTime) {
             enemy.endX
         ) {
 
+            enemy.x =
+                enemy.endX -
+                enemy.width;
+
             enemy.direction = -1;
 
         }
 
 
-        enemy.state = "walk";
+        // NO WALKING ANIMATION
 
+        enemy.state = "idle";
 
-        updateAnimation(
-            enemy,
-            "walk",
-            deltaTime
-        );
+        enemy.frame = 0;
 
     }
 
 }
 
 
-// ================================
-// ANIMATION
-// ================================
+// =====================================================
+// ENEMY ANIMATION
+// =====================================================
 
-function updateAnimation(
+function updateEnemyAnimation(
     enemy,
     animation,
     deltaTime
@@ -899,20 +1012,31 @@ function updateAnimation(
         enemyAnimations[animation];
 
 
-    if (!frames.length) {
+    if (
+        !frames ||
+        frames.length === 0
+    ) {
+
         return;
+
     }
 
 
-    enemy.timer +=
+    enemy.animationTimer +=
         deltaTime;
 
 
-    if (
-        enemy.timer >= 0.10
+    const frameDuration =
+        0.09;
+
+
+    while (
+        enemy.animationTimer >=
+        frameDuration
     ) {
 
-        enemy.timer = 0;
+        enemy.animationTimer -=
+            frameDuration;
 
         enemy.frame++;
 
@@ -942,58 +1066,51 @@ function updateAnimation(
 }
 
 
-// ================================
-// PLAYER / ENEMY COLLISION
-// ================================
+// =====================================================
+// ENEMY POSITIONS
+// =====================================================
 
-function checkEnemyCollision() {
+function updateEnemyPositions() {
 
-    for (const enemy of enemies) {
+    enemies[0].y =
+        platforms[0].y -
+        enemies[0].height;
 
-        if (!enemy.alive) {
-            continue;
-        }
+    enemies[1].y =
+        platforms[1].y -
+        enemies[1].height;
 
+    enemies[2].y =
+        platforms[2].y -
+        enemies[2].height;
 
-        if (
-            player.x <
-                enemy.x +
-                enemy.width &&
+    enemies[3].y =
+        platforms[4].y -
+        enemies[3].height;
 
-            player.x +
-                player.width >
-                enemy.x &&
-
-            player.y <
-                enemy.y +
-                enemy.height &&
-
-            player.y +
-                player.height >
-                enemy.y
-        ) {
-
-            loseLife();
-
-            return;
-
-        }
-
-    }
+    enemies[4].y =
+        platforms[6].y -
+        enemies[4].height;
 
 }
 
 
-// ================================
+// =====================================================
 // COINS
-// ================================
+// =====================================================
 
 function checkCoins() {
 
-    for (const coin of coins) {
+    for (
+        const coin of coins
+    ) {
 
-        if (coin.collected) {
+        if (
+            coin.collected
+        ) {
+
             continue;
+
         }
 
 
@@ -1053,9 +1170,53 @@ function checkCoins() {
 }
 
 
-// ================================
+// =====================================================
+// ENEMY COLLISION
+// =====================================================
+
+function checkEnemyCollision() {
+
+    for (
+        const enemy of enemies
+    ) {
+
+        if (!enemy.alive) {
+            continue;
+        }
+
+
+        if (
+            player.x <
+                enemy.x +
+                enemy.width &&
+
+            player.x +
+                player.width >
+                enemy.x &&
+
+            player.y <
+                enemy.y +
+                enemy.height &&
+
+            player.y +
+                player.height >
+                enemy.y
+        ) {
+
+            loseLife();
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+// =====================================================
 // CAMERA
-// ================================
+// =====================================================
 
 function updateCamera() {
 
@@ -1068,11 +1229,20 @@ function updateCamera() {
         (
             target -
             camera.x
-        ) * 0.08;
+        ) *
+        Math.min(
+            1,
+            8 *
+            0.016
+        );
 
 
-    if (camera.x < 0) {
+    if (
+        camera.x < 0
+    ) {
+
         camera.x = 0;
+
     }
 
 
@@ -1094,14 +1264,18 @@ function updateCamera() {
 }
 
 
-// ================================
+// =====================================================
 // BACKGROUND
-// ================================
+// =====================================================
 
 function drawBackground() {
 
-    if (!background.complete) {
+    if (
+        !background.complete
+    ) {
+
         return;
+
     }
 
 
@@ -1154,8 +1328,10 @@ function drawBackground() {
 
 
     const offset =
-        -(parallax %
-        maxOffset);
+        -(
+            parallax %
+            maxOffset
+        );
 
 
     ctx.drawImage(
@@ -1185,9 +1361,9 @@ function drawBackground() {
 }
 
 
-// ================================
+// =====================================================
 // GROUND
-// ================================
+// =====================================================
 
 function drawGround() {
 
@@ -1231,13 +1407,15 @@ function drawGround() {
 }
 
 
-// ================================
+// =====================================================
 // PLATFORMS
-// ================================
+// =====================================================
 
 function drawPlatforms() {
 
-    for (const platform of platforms) {
+    for (
+        const platform of platforms
+    ) {
 
         const x =
             platform.x -
@@ -1276,16 +1454,22 @@ function drawPlatforms() {
 }
 
 
-// ================================
+// =====================================================
 // COINS DRAW
-// ================================
+// =====================================================
 
 function drawCoins() {
 
-    for (const coin of coins) {
+    for (
+        const coin of coins
+    ) {
 
-        if (coin.collected) {
+        if (
+            coin.collected
+        ) {
+
             continue;
+
         }
 
 
@@ -1346,13 +1530,15 @@ function drawCoins() {
 }
 
 
-// ================================
+// =====================================================
 // BULLETS DRAW
-// ================================
+// =====================================================
 
 function drawBullets() {
 
-    for (const bullet of bullets) {
+    for (
+        const bullet of bullets
+    ) {
 
         const x =
             bullet.x -
@@ -1371,23 +1557,6 @@ function drawBullets() {
                 bullet.height
             );
 
-        } else {
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x + 20,
-                bullet.y + 20,
-                12,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fillStyle =
-                "#00d9ff";
-
-            ctx.fill();
-
         }
 
     }
@@ -1395,13 +1564,15 @@ function drawBullets() {
 }
 
 
-// ================================
+// =====================================================
 // ENEMY DRAW
-// ================================
+// =====================================================
 
 function drawEnemies() {
 
-    for (const enemy of enemies) {
+    for (
+        const enemy of enemies
+    ) {
 
         if (
             !enemy.alive &&
@@ -1411,11 +1582,6 @@ function drawEnemies() {
             continue;
 
         }
-
-
-        const x =
-            enemy.x -
-            camera.x;
 
 
         const frames =
@@ -1434,19 +1600,11 @@ function drawEnemies() {
         }
 
 
-        let frame =
-            enemy.frame;
-
-
-        if (
-            frame >=
-            frames.length
-        ) {
-
-            frame =
-                frames.length - 1;
-
-        }
+        const frame =
+            Math.min(
+                enemy.frame,
+                frames.length - 1
+            );
 
 
         const image =
@@ -1454,53 +1612,66 @@ function drawEnemies() {
 
 
         if (
-            image.complete
+            !image.complete
         ) {
 
-            ctx.save();
-
-
-            if (
-                enemy.direction === -1
-            ) {
-
-                ctx.translate(
-                    x +
-                    enemy.width,
-                    enemy.y
-                );
-
-                ctx.scale(-1, 1);
-
-                ctx.drawImage(
-                    image,
-                    0,
-                    0,
-                    enemy.width,
-                    enemy.height
-                );
-
-            } else {
-
-                ctx.drawImage(
-                    image,
-                    x,
-                    enemy.y,
-                    enemy.width,
-                    enemy.height
-                );
-
-            }
-
-
-            ctx.restore();
+            continue;
 
         }
 
 
+        const x =
+            enemy.x -
+            camera.x;
+
+
+        ctx.save();
+
+
+        // Face direction
+
+        if (
+            enemy.direction === -1
+        ) {
+
+            ctx.translate(
+                x +
+                enemy.width,
+                enemy.y
+            );
+
+            ctx.scale(-1, 1);
+
+
+            ctx.drawImage(
+                image,
+                0,
+                0,
+                enemy.width,
+                enemy.height
+            );
+
+        } else {
+
+            ctx.drawImage(
+                image,
+                x,
+                enemy.y,
+                enemy.width,
+                enemy.height
+            );
+
+        }
+
+
+        ctx.restore();
+
+
         // Health bar
 
-        if (enemy.alive) {
+        if (
+            enemy.alive
+        ) {
 
             const health =
                 enemy.health /
@@ -1536,9 +1707,9 @@ function drawEnemies() {
 }
 
 
-// ================================
+// =====================================================
 // FINISH
-// ================================
+// =====================================================
 
 function drawFinish() {
 
@@ -1591,14 +1762,18 @@ function drawFinish() {
 }
 
 
-// ================================
+// =====================================================
 // PLAYER DRAW
-// ================================
+// =====================================================
 
 function drawPlayer() {
 
-    if (!robotImage.complete) {
+    if (
+        !robotImage.complete
+    ) {
+
         return;
+
     }
 
 
@@ -1649,9 +1824,9 @@ function drawPlayer() {
 }
 
 
-// ================================
-// DRAW EVERYTHING
-// ================================
+// =====================================================
+// DRAW
+// =====================================================
 
 function draw() {
 
@@ -1682,9 +1857,9 @@ function draw() {
 }
 
 
-// ================================
+// =====================================================
 // LOSE LIFE
-// ================================
+// =====================================================
 
 function loseLife() {
 
@@ -1723,9 +1898,9 @@ function loseLife() {
 }
 
 
-// ================================
+// =====================================================
 // RESTART
-// ================================
+// =====================================================
 
 function restartGame() {
 
@@ -1733,33 +1908,38 @@ function restartGame() {
 
     lives = 3;
 
+    bullets.length = 0;
 
-    for (const coin of coins) {
+
+    for (
+        const coin of coins
+    ) {
 
         coin.collected = false;
 
     }
 
 
-    bullets.length = 0;
-
-
-    for (const enemy of enemies) {
+    for (
+        const enemy of enemies
+    ) {
 
         enemy.health =
             enemy.maxHealth;
 
         enemy.alive = true;
 
-        enemy.state = "walk";
+        enemy.state = "idle";
 
         enemy.frame = 0;
 
-        enemy.timer = 0;
+        enemy.animationTimer = 0;
 
         enemy.hitTimer = 0;
 
         enemy.deathTimer = 0;
+
+        enemy.velocityX = 0;
 
     }
 
@@ -1798,60 +1978,9 @@ function restartGame() {
 }
 
 
-// ================================
-// ENEMY POSITIONS
-// ================================
-
-function updateEnemyPositions() {
-
-    for (const enemy of enemies) {
-
-        // Find closest platform
-
-        let closest =
-            platforms[0];
-
-
-        let smallest =
-            Infinity;
-
-
-        for (const platform of platforms) {
-
-            const distance =
-                Math.abs(
-                    enemy.x -
-                    platform.x
-                );
-
-
-            if (
-                distance <
-                smallest
-            ) {
-
-                smallest = distance;
-
-                closest =
-                    platform;
-
-            }
-
-        }
-
-
-        enemy.y =
-            closest.y -
-            enemy.height;
-
-    }
-
-}
-
-
-// ================================
-// FINISH CHECK
-// ================================
+// =====================================================
+// FINISH
+// =====================================================
 
 function checkFinish() {
 
@@ -1866,6 +1995,7 @@ function checkFinish() {
 
         gameRunning = false;
 
+
         alert(
             "LEVEL 1-2 COMPLETE! 🏆\n" +
             "Coins: " +
@@ -1877,19 +2007,28 @@ function checkFinish() {
 }
 
 
-// ================================
-// LOOP
-// ================================
+// =====================================================
+// GAME LOOP
+// =====================================================
 
 let lastTime = 0;
 
 
 function gameLoop(timestamp) {
 
+    if (!lastTime) {
+
+        lastTime =
+            timestamp;
+
+    }
+
+
     const deltaTime =
         Math.min(
             (timestamp -
-            lastTime) / 1000,
+            lastTime) /
+            1000,
             0.033
         );
 
@@ -1936,9 +2075,9 @@ function gameLoop(timestamp) {
 }
 
 
-// ================================
+// =====================================================
 // BUTTONS
-// ================================
+// =====================================================
 
 document.getElementById(
     "start-button"
@@ -1954,6 +2093,8 @@ document.getElementById(
 
 
         gameRunning = true;
+
+        gamePaused = false;
 
 
         updateGround();
@@ -2031,9 +2172,9 @@ document.getElementById(
 );
 
 
-// ================================
+// =====================================================
 // INITIALIZE
-// ================================
+// =====================================================
 
 resizeCanvas();
 
