@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Robot3D</title>
+    <title>Robot3D - Level 1-2</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,10 +16,10 @@
 
     <canvas id="gameCanvas"></canvas>
 
-    <!-- HUD -->
     <div id="hud">
 
         <div class="hud-left">
+
             <div class="hud-item">
                 🪙 <span id="coin-count">0</span>
             </div>
@@ -26,10 +27,11 @@
             <div class="hud-item">
                 ❤️ <span id="lives">3</span>
             </div>
+
         </div>
 
         <div class="hud-center">
-            <span id="level-name">WORLD 1-1</span>
+            <span>WORLD 1-2</span>
         </div>
 
         <div class="hud-right">
@@ -39,15 +41,14 @@
     </div>
 
 
-    <!-- START SCREEN -->
     <div id="start-screen">
 
         <div class="start-panel">
 
-            <h1>ROBOT3D</h1>
+            <h1>WORLD 1-2</h1>
 
             <p>
-                Adventure through the robot world!
+                The enemies have arrived!
             </p>
 
             <button id="start-button">
@@ -55,8 +56,13 @@
             </button>
 
             <div class="controls">
+
                 <p><b>A / D</b> — Move</p>
+
                 <p><b>W / SPACE</b> — Jump</p>
+
+                <p><b>X / CLICK</b> — Shoot</p>
+
             </div>
 
         </div>
@@ -64,7 +70,6 @@
     </div>
 
 
-    <!-- PAUSE SCREEN -->
     <div id="pause-screen" class="hidden">
 
         <div class="pause-panel">
@@ -84,7 +89,6 @@
     </div>
 
 
-    <!-- GAME OVER -->
     <div id="game-over-screen" class="hidden">
 
         <div class="game-over-panel">
@@ -106,7 +110,8 @@
 
 </div>
 
-<script src="game.js"></script>
+<script src="level1-2.js"></script>
 
 </body>
+
 </html>

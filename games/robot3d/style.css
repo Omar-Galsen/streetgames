@@ -1,0 +1,332 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+}
+
+#gameCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+
+/* =========================
+   HUD
+========================= */
+
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 0;
+
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 25px;
+
+    pointer-events: none;
+}
+
+.hud-left {
+    display: flex;
+    gap: 12px;
+}
+
+.hud-item {
+    min-width: 90px;
+
+    padding: 10px 18px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    border: 2px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    text-align: center;
+
+    backdrop-filter: blur(5px);
+}
+
+.hud-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 10px 22px;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+.hud-right {
+    pointer-events: auto;
+}
+
+#pause-button {
+    width: 52px;
+    height: 52px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    color: white;
+
+    font-size: 25px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#pause-button:hover {
+    transform: scale(1.08);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
+/* =========================
+   START SCREEN
+========================= */
+
+#start-screen,
+#pause-screen,
+#game-over-screen {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    z-index: 10;
+}
+
+.start-panel,
+.pause-panel,
+.game-over-panel {
+    width: min(90%, 450px);
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: rgba(20, 30, 40, 0.92);
+
+    border: 2px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5);
+
+    color: white;
+}
+
+.start-panel h1 {
+    margin-bottom: 10px;
+
+    font-size: 55px;
+
+    letter-spacing: 4px;
+}
+
+.start-panel p {
+    margin-bottom: 25px;
+
+    color: #d9e6ed;
+
+    font-size: 17px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+    border: none;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    transition:
+        transform 0.15s,
+        filter 0.15s;
+}
+
+button:hover {
+    transform: scale(1.05);
+
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+#start-button,
+#resume-button,
+#restart-button,
+#retry-button {
+    width: 100%;
+
+    padding: 15px 25px;
+
+    margin-top: 10px;
+
+    border-radius: 12px;
+
+    background: #35c759;
+
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#restart-button {
+    background: #e04b4b;
+}
+
+#retry-button {
+    background: #35c759;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+    margin-top: 25px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.controls p {
+    margin: 7px 0;
+
+    color: #cbd5dc;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   PAUSE
+========================= */
+
+.pause-panel h2,
+.game-over-panel h2 {
+    margin-bottom: 20px;
+
+    font-size: 35px;
+}
+
+.pause-panel button + button {
+    margin-top: 10px;
+}
+
+.game-over-panel p {
+    margin-bottom: 15px;
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    #hud {
+        top: 10px;
+        padding: 0 10px;
+    }
+
+    .hud-item {
+        min-width: 65px;
+
+        padding: 8px 10px;
+
+        font-size: 16px;
+    }
+
+    .hud-center {
+        font-size: 13px;
+
+        padding: 8px 12px;
+    }
+
+    #pause-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .start-panel,
+    .pause-panel,
+    .game-over-panel {
+        padding: 30px 20px;
+    }
+
+    .start-panel h1 {
+        font-size: 40px;
+    }
+}
