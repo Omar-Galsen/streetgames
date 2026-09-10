@@ -195,6 +195,19 @@
             background: #050706;
         }
 
+        /* DUNGEON PREVIEW */
+        .dungeon-preview {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.55)),
+                url('/games/dungeon/assets/maps/background.png') center/cover no-repeat;
+            font-size: 64px;
+        }
+
         /* =========================
            GAME INFO
         ========================= */
@@ -657,6 +670,32 @@
 
                 <p>
                     Challenge your brain and solve the puzzle.
+                </p>
+
+                <span class="play-button">
+                    ▶ PLAY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- DUNGEON -->
+
+        <div class="game-card"
+             onclick="openGame('Dungeon Adventure', '/games/dungeon/')">
+
+            <div class="game-video dungeon-preview">
+                ⚔️
+            </div>
+
+            <div class="game-info">
+
+                <h3>⚔️ Dungeon Adventure</h3>
+
+                <p>
+                    Explore the dungeon, fight slimes, collect rubies, and upgrade your sword.
                 </p>
 
                 <span class="play-button">
