@@ -1,0 +1,17 @@
+{
+  "mapWidth": 3000,
+  "mapHeight": 3000,
+  "coordinateMode": "world",
+  "slimes": [
+    {
+      "id": 1,
+      "x": 1530,
+      "y": 740
+    },
+    {
+      "id": 2,
+      "x": 1900,
+      "y": 1250
+    }
+  ]
+}
