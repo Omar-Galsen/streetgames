@@ -1,498 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreetGames</title>
 
-    <title>STREETGAMES — Play Anything</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      min-height: 100vh;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            color: white;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(0,255,120,.12), transparent 30%),
-                radial-gradient(circle at 80% 10%, rgba(0,180,255,.10), transparent 30%),
-                #070b09;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    header {
+      padding: 30px 6%;
+      background: #181818;
+      border-bottom: 2px solid #333;
+    }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image:
-                radial-gradient(circle, rgba(85,255,136,.5) 1px, transparent 1px);
-            background-size: 45px 45px;
-            opacity: .12;
-            pointer-events: none;
-        }
+    header h1 {
+      font-size: 38px;
+    }
 
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+    header p {
+      margin-top: 8px;
+      color: #aaa;
+    }
 
-            height: 72px;
-            padding: 0 6%;
+    main {
+      padding: 50px 6%;
+    }
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+    }
 
-            background: rgba(5,10,8,.88);
-            backdrop-filter: blur(15px);
+    .game {
+      background: #202020;
+      border: 1px solid #333;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
 
-            border-bottom: 1px solid rgba(85,255,136,.15);
-        }
+    .game:hover {
+      transform: translateY(-5px);
+      border-color: #777;
+    }
 
-        .logo {
-            color: #55ff88;
-            font-size: 27px;
-            font-weight: 900;
-            letter-spacing: 2px;
-        }
+    .preview {
+      height: 190px;
+      background:
+        url('/games/dungeon/assets/maps/background.png')
+        center / cover no-repeat;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 28px;
-        }
+    .info {
+      padding: 22px;
+    }
 
-        .nav-links a {
-            color: #ddd;
-            text-decoration: none;
-            font-weight: bold;
-            transition: .2s;
-        }
+    .info h2 {
+      margin-bottom: 10px;
+    }
 
-        .nav-links a:hover {
-            color: #55ff88;
-        }
+    .info p {
+      color: #aaa;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
 
-        .hero {
-            min-height: 390px;
-            padding: 80px 7% 50px;
+    .play {
+      display: inline-block;
+      padding: 12px 22px;
+      background: #fff;
+      color: #111;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .hero-tag {
-            color: #55ff88;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 4px;
-            margin-bottom: 18px;
-        }
-
-        .hero h1 {
-            font-size: clamp(55px, 9vw, 105px);
-            line-height: .9;
-            font-weight: 1000;
-            letter-spacing: -5px;
-            max-width: 900px;
-        }
-
-        .hero h1 span {
-            color: #55ff88;
-        }
-
-        .hero p {
-            margin-top: 25px;
-            color: #aeb8b1;
-            font-size: 20px;
-            max-width: 600px;
-        }
-
-        .section {
-            padding: 30px 6% 70px;
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-
-        .section-title h2 {
-            font-size: 30px;
-        }
-
-        .section-title span {
-            color: #55ff88;
-            font-size: 13px;
-            letter-spacing: 2px;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-        }
-
-        .game-link {
-            text-decoration: none;
-            color: white;
-        }
-
-        .game-card {
-            position: relative;
-            min-height: 230px;
-            padding: 25px;
-
-            border-radius: 20px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(25,40,31,.95),
-                    rgba(9,15,12,.95)
-                );
-
-            border: 1px solid rgba(255,255,255,.08);
-
-            overflow: hidden;
-
-            transition:
-                transform .25s ease,
-                border-color .25s ease,
-                box-shadow .25s ease;
-        }
-
-        .game-card::after {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            right: -40px;
-            bottom: -50px;
-
-            background: #55ff88;
-            filter: blur(60px);
-            opacity: .08;
-        }
-
-        .game-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(85,255,136,.5);
-            box-shadow: 0 15px 45px rgba(0,0,0,.45);
-        }
-
-        .game-icon {
-            display: block;
-            font-size: 58px;
-            margin-bottom: 18px;
-        }
-
-        .game-card h3 {
-            font-size: 23px;
-            margin-bottom: 9px;
-        }
-
-        .game-card p {
-            color: #9ca69f;
-            line-height: 1.5;
-            font-size: 14px;
-            max-width: 260px;
-        }
-
-        .play {
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-
-            width: 42px;
-            height: 42px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: #55ff88;
-            color: #06120a;
-
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .category {
-            padding: 11px 18px;
-            border-radius: 30px;
-
-            color: #c9d0cb;
-            background: #111914;
-            border: 1px solid #26332b;
-
-            font-size: 14px;
-        }
-
-        footer {
-            padding: 40px 6%;
-            border-top: 1px solid rgba(255,255,255,.08);
-            color: #69736c;
-            text-align: center;
-        }
-
-        footer strong {
-            color: #55ff88;
-        }
-
-        @media (max-width: 700px) {
-            nav {
-                padding: 0 20px;
-            }
-
-            .nav-links {
-                gap: 12px;
-            }
-
-            .nav-links a {
-                font-size: 13px;
-            }
-
-            .hero {
-                padding: 65px 25px 40px;
-            }
-
-            .hero h1 {
-                letter-spacing: -3px;
-            }
-
-            .section {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-        }
-    </style>
+    .play:hover {
+      background: #ddd;
+    }
+  </style>
 </head>
 
 <body>
 
-<nav>
-    <div class="logo">STREETGAMES</div>
+<header>
+  <h1>🎮 StreetGames</h1>
+  <p>Play games directly from the browser.</p>
+</header>
 
-    <div class="nav-links">
-        <a href="/">HOME</a>
-        <a href="#games">GAMES</a>
-        <a href="#categories">CATEGORIES</a>
-    </div>
-</nav>
+<main>
+  <h2 style="margin-bottom:25px;">Games</h2>
 
+  <section class="games">
 
-<section class="hero">
-    <div class="hero-tag">THE ULTIMATE BROWSER ARCADE</div>
+    <article class="game">
+      <div class="preview"></div>
 
-    <h1>
-        PLAY<br>
-        <span>ANYTHING.</span>
-    </h1>
+      <div class="info">
+        <h2>⚔️ Dungeon Adventure</h2>
 
-    <p>
-        Fast, free browser games. No downloads. Pick a game and start playing.
-    </p>
-</section>
+        <p>
+          Explore the dungeon, fight slimes, collect rubies,
+          and upgrade your sword.
+        </p>
 
-
-<section class="section" id="games">
-
-    <div class="section-title">
-        <h2>Featured Games</h2>
-        <span>PLAY NOW →</span>
-    </div>
-
-    <div class="games-grid">
-
-        <!-- RUNNER -->
-        <a href="/games/runner/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🏃</span>
-                <h3>Street Runner</h3>
-                <p>
-                    Jump over obstacles and see how far you can run.
-                </p>
-                <div class="play">▶</div>
-            </div>
+        <a class="play" href="/games/dungeon/">
+          PLAY DUNGEON
         </a>
+      </div>
+    </article>
 
-
-        <!-- SOCCER -->
-        <a href="/games/soccer/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">⚽</span>
-                <h3>Street Soccer</h3>
-                <p>
-                    Show your skills and become the king of the street.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- RACING -->
-        <a href="/games/racing/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🏎️</span>
-                <h3>Street Racer</h3>
-                <p>
-                    Dodge traffic and become the fastest driver.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- PUZZLE -->
-        <a href="/games/puzzle/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🧩</span>
-                <h3>Brain Puzzle</h3>
-                <p>
-                    Test your brain with challenging puzzles.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- AIRPLANE -->
-        <a href="/games/airplane/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">✈️</span>
-                <h3>Sky Pilot</h3>
-                <p>
-                    Fly through obstacles and beat your high score.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- DEER -->
-        <a href="/games/deer/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🦌</span>
-                <h3>Deer Hunt</h3>
-                <p>
-                    Test your aim and hit moving targets.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- SNAKE -->
-        <a href="/games/snake/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🐍</span>
-                <h3>Snake</h3>
-                <p>
-                    Classic snake gameplay with a modern arcade style.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- CHESS -->
-        <a href="/games/chess/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">♟️</span>
-                <h3>Chess Puzzle</h3>
-                <p>
-                    Find the best move and test your chess skills.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- COMMANDO -->
-        <a href="/games/commando/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">⚔️</span>
-                <h3>Command Strike</h3>
-                <p>
-                    Take down moving targets and survive the attack.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- ZOMBIE -->
-        <a href="/games/zombie/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🧟</span>
-                <h3>Zombie Garden</h3>
-                <p>
-                    Defend your garden against waves of zombies.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-
-        <!-- ADVENTURE -->
-        <a href="/games/adventure/" class="game-link">
-            <div class="game-card">
-                <span class="game-icon">🏃‍♂️</span>
-                <h3>Street Adventure</h3>
-                <p>
-                    Run, jump, collect coins, and conquer the levels.
-                </p>
-                <div class="play">▶</div>
-            </div>
-        </a>
-
-    </div>
-
-</section>
-
-
-<section class="section" id="categories">
-
-    <div class="section-title">
-        <h2>Categories</h2>
-    </div>
-
-    <div class="categories">
-        <div class="category">⚽ Sports</div>
-        <div class="category">🏎️ Racing</div>
-        <div class="category">🧩 Puzzle</div>
-        <div class="category">⚔️ Action</div>
-        <div class="category">🏃 Adventure</div>
-        <div class="category">✈️ Flying</div>
-        <div class="category">🎯 Arcade</div>
-        <div class="category">♟️ Strategy</div>
-    </div>
-
-</section>
-
-
-<footer>
-    <strong>STREETGAMES</strong>
-    <br><br>
-    Your browser. Your games. Your street.
-</footer>
-
+  </section>
+</main>
 
 </body>
 </html>
